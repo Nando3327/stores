@@ -1,4 +1,4 @@
-# LOGIN
+# PLACES
 
 TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
@@ -42,9 +42,16 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 -API
 
     -POST
-        login (name,password)
-            name: alias, email, uerkey(id)
+        getUserPlaces (name,mode)
+            mode: All, Visited, Next
+            user: userkey from user table
         
+        getUserCountries (user)
+            user: userkey from user table
+        
+        getUserLocationDetail (name,location)
+            user: userkey from user table
+            location: Id from location table
         
         
 
