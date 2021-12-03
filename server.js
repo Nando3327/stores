@@ -38,7 +38,7 @@ app.post('/getUserPlaces', function (req, res) {
     if(!req.body.user || !req.body.mode) {
         respuesta = {
             error: true,
-            code: 8000,
+            code: 6000,
             message: 'Datos incompletos'
         };
         res.send(respuesta);
@@ -59,7 +59,7 @@ app.post('/getUserPlacesCountry', function (req, res) {
     if(!req.body.user || !req.body.country) {
         respuesta = {
             error: true,
-            code: 8000,
+            code: 6000,
             message: 'Datos incompletos'
         };
         res.send(respuesta);
@@ -80,7 +80,7 @@ app.post('/getUserCountries', function (req, res) {
     if(!req.body.user) {
         respuesta = {
             error: true,
-            code: 8000,
+            code: 6000,
             message: 'Datos incompletos'
         };
         res.send(respuesta);
@@ -101,7 +101,7 @@ app.post('/getUserLocationDetail', function (req, res) {
     if(!req.body.user || !req.body.location) {
         respuesta = {
             error: true,
-            code: 8000,
+            code: 6000,
             message: 'Datos incompletos'
         };
         res.send(respuesta);
@@ -118,6 +118,6 @@ app.post('/getUserLocationDetail', function (req, res) {
     }
 });
 
-http.createServer(app).listen(8001, () => {
-    console.log('Server started at http://localhost:8001');
+http.createServer(app).listen(6001, () => {
+    console.log('Server started at http://localhost:6001');
 });

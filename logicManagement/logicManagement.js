@@ -13,7 +13,7 @@ module.exports = {
                     }
                 };
                 if(data) {
-                    response.data.profileData = data;
+                    response.data.places = data;
                 }else{
                     response.message = 'USUARIO SIN UBICACIONES';
                 }
@@ -32,7 +32,7 @@ module.exports = {
                     }
                 };
                 if(data) {
-                    response.data.profileData = data;
+                    response.data.places = data;
                 }else{
                     response.message = 'USUARIO SIN UBICACIONES';
                 }
@@ -51,7 +51,7 @@ module.exports = {
                     }
                 };
                 if(data) {
-                    response.data.profileData = data;
+                    response.data.places = data;
                 }else{
                     response.message = 'USUARIO SIN UBICACIONES';
                 }
@@ -71,15 +71,13 @@ module.exports = {
                 code: 200,
                 message: 'OK',
                 data: {
-                    countries: []
+                    places: []
                 }
             };
             if(data) {
-                response.data.countries = data;
+                response.data.places = data;
             }else{
-                response.code = 8009;
                 response.message = 'USUARIO SIN UBICACIONES';
-                response.data = {};
             }
             return response;
         }).catch(e => {
@@ -100,9 +98,7 @@ module.exports = {
             if(data) {
                 response.data.countries = data;
             }else{
-                response.code = 8009;
-                response.message = 'USUARIO SIN UBICACIONES';
-                response.data = {};
+                response.message = 'USUARIO SIN PAISES';
             }
             return response;
         }).catch(e => {
@@ -117,15 +113,13 @@ module.exports = {
                 code: 200,
                 message: 'OK',
                 data: {
-                    places: []
+                    details: []
                 }
             };
             if(data) {
-                response.data.profileData = data;
+                response.data.details = data;
             }else{
-                response.code = 8009;
-                response.message = 'USUARIO SIN UBICACIONES';
-                response.data = [];
+                response.message = 'USUARIO SIN DETALLES DE UBICACION';
             }
             return response;
         }).catch(e => {
