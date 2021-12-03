@@ -57,6 +57,27 @@ app.post('/getUserPlaces', function (req, res) {
     }
 });
 
+app.post('/getUserPlacesCountry', function (req, res) {
+    if(!req.body.user || !req.body.country) {
+        respuesta = {
+            error: true,
+            code: 8000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.getUserPlacesCountry(req.body.user, req.body.country).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 app.post('/getUserCountries', function (req, res) {
     if(!req.body.user) {
         respuesta = {
