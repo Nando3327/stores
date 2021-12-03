@@ -1,6 +1,4 @@
 const lm = require('./logicManagement/logicManagement');
-const LoginModel = require('./models/login.model');
-const User = require('./models/User.model');
 
 const express = require('express');
 const http = require('http');
