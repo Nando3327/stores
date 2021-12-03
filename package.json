@@ -1,0 +1,24 @@
+{
+  "name": "crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Fernando Castillo",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "cheerio": "^1.0.0-rc.3",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "g": "^2.0.1",
+    "md5": "^2.2.1",
+    "mocha": "^7.1.1",
+    "mysql": "^2.18.1",
+    "supertest": "^4.0.2"
+  }
+}
