@@ -14,7 +14,7 @@ module.exports = {
     getUserPlaces: function (user) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as long, ' +
+                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
                     'L.Name as name, L.Description as description, L.Image as image, LU.Visited ' +
                     'FROM PLACES.location L ' +
                     'INNER JOIN PLACES.location_user LU ON L.Id = LU.LocationKey ' +
@@ -36,7 +36,7 @@ module.exports = {
     getUserPlacesCountry: function (user, country) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as long, ' +
+                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
                     'L.Name as name, L.Description as description, L.Image as image, LU.Visited ' +
                     'FROM PLACES.countries C ' +
                     'INNER JOIN PLACES.location L ON L.Country = C.Id ' +
@@ -59,7 +59,7 @@ module.exports = {
     getUserPlacesByVisited: function (user, visited) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as long, ' +
+                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
                     'L.Name as name, L.Description as description, L.Image as image, LU.Visited ' +
                     'FROM PLACES.location L ' +
                     'INNER JOIN PLACES.location_user LU ON L.Id = LU.LocationKey ' +

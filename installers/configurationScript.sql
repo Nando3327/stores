@@ -10,6 +10,7 @@ use places;
     alter table countries
         add primary key (Id);
 
+    grant delete, insert, select, update on table countries to sa@localhost;
 
     create table countries_user
     (
@@ -29,6 +30,7 @@ use places;
     alter table countries_user
         add primary key (Id);
 
+    grant delete, insert, select, update on table countries_user to sa@localhost;
 
     create table location
     (
@@ -48,6 +50,7 @@ use places;
     alter table location
         add primary key (Id);
 
+    grant delete, insert, select, update on table location to sa@localhost;
 
     create table location_user
     (
@@ -66,6 +69,7 @@ use places;
     alter table location_user
         add primary key (id);
 
+    grant delete, insert, select, update on table location_user to sa@localhost;
 
     create table location_user_details
     (
@@ -77,5 +81,4 @@ use places;
             foreign key (Location_user_id) references location_user (id)
     );
 
-
-
+    grant delete, insert, select, update on table location_user_details to sa@localhost;
