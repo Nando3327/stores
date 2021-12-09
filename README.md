@@ -56,6 +56,9 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         getUserLocationDetail (name,location)
             user: userkey from user table
             location: Id from location table
-        
-        
+
+        setCountryStatus (user, country, favorite)
+            user: userkey from user table
+            country: Id from country table
+            favorite: true or false (1,0) OPTIONAL*0 default*
 

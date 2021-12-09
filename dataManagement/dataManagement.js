@@ -118,5 +118,25 @@ module.exports = {
                 resolve(e);
             }
         });
+    },
+
+    setCountryStatus: function (user, country, favorite) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'UPDATE Places.countries_user ' +
+                    'SET Favorite = ? ' +
+                    'WHERE UserKey = ? and Country = ?';
+                connection.query(query, [favorite, user, country], (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve('UPDATE REALIZADO CON EXITO!');
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
     }
 };

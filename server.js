@@ -118,6 +118,27 @@ app.post('/getUserLocationDetail', function (req, res) {
     }
 });
 
+app.post('/setCountryStatus', function (req, res) {
+    if(!req.body.user || !req.body.country) {
+        respuesta = {
+            error: true,
+            code: 6000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.setCountryStatus(req.body.user, req.body.country, req.body.favorite).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 http.createServer(app).listen(6001, () => {
     console.log('Server started at http://localhost:6001');
 });

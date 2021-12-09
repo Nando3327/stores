@@ -128,5 +128,27 @@ module.exports = {
         });
     },
 
+    setCountryStatus: function (user, country, favorite = 0) {
+        return dm.setCountryStatus(user, country, favorite).then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    message: ''
+                }
+            };
+            if(data) {
+                response.data.message = data;
+            }else{
+                response.code = 6002
+                response.message = 'ERROR EN ACTUALIZACION DEL STATUS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
 
 };
