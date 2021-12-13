@@ -102,9 +102,9 @@ module.exports = {
     getUserLocationDetail: function (user, location) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT LUD.Weather as weather, LUD.Altimetry as altimetry, LUD.Date as date ' +
-                    'FROM Places.location_user LU ' +
-                    'INNER JOIN Places.location_user_details LUD ON LU.Id = LUD.Location_user_id ' +
+                const query = 'SELECT LU.Weather as weather, L.Altimetry as altimetry, LU.Date as date ' +
+                    'FROM Places.location L ' +
+                    'INNER JOIN Places.location_user LU ON L.Id = LU.LocationKey ' +
                     'WHERE LU.UserKey = ? and LU.LocationKey = ? ';
                 connection.query(query, [user, location], (err, rows) => {
                     if (err) {
