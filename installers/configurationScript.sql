@@ -41,6 +41,7 @@ use places;
         Description text                     not null,
         Image       text                     not null,
         Country     int                      null,
+        Altimetry   int                      not null,
         constraint location_key_uindex
             unique (Id),
         constraint location_countries_Id_fk
@@ -52,33 +53,24 @@ use places;
 
     grant delete, insert, select, update on table location to sa@localhost;
 
-    create table location_user
-    (
-        id          int auto_increment,
-        UserKey     varchar(20)   null,
-        LocationKey int           null,
-        Visited     int default 0 null,
-        constraint location_user_id_uindex
-            unique (id),
-        constraint location_user_location_Key_fk
-            foreign key (LocationKey) references location (Id),
-        constraint location_user_users_UserKey_fk
-            foreign key (UserKey) references security.users (UserKey)
-    );
+   create table location_user
+   (
+       id          int auto_increment,
+       UserKey     varchar(20)   null,
+       LocationKey int           null,
+       Visited     int default 0 null,
+       Weather     varchar(300)  not null,
+       date        date          not null,
+       constraint location_user_id_uindex
+           unique (id),
+       constraint location_user_location_Key_fk
+           foreign key (LocationKey) references location (Id),
+       constraint location_user_users_UserKey_fk
+           foreign key (UserKey) references security.users (UserKey)
+   );
 
-    alter table location_user
-        add primary key (id);
+   alter table location_user
+       add primary key (id);
 
-    grant delete, insert, select, update on table location_user to sa@localhost;
+   grant delete, insert, select, update on table location_user to sa@localhost;
 
-    create table location_user_details
-    (
-        Location_user_id int         not null,
-        Weather          varchar(30) not null,
-        Altimetry        float       not null,
-        Date             varchar(30) not null,
-        constraint location_user_details_location_user_id_fk
-            foreign key (Location_user_id) references location_user (id)
-    );
-
-    grant delete, insert, select, update on table location_user_details to sa@localhost;
