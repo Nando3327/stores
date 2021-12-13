@@ -53,24 +53,25 @@ use places;
 
     grant delete, insert, select, update on table location to sa@localhost;
 
-   create table location_user
-   (
-       id          int auto_increment,
-       UserKey     varchar(20)   null,
-       LocationKey int           null,
-       Visited     int default 0 null,
-       Weather     varchar(300)  not null,
-       date        date          not null,
-       constraint location_user_id_uindex
-           unique (id),
-       constraint location_user_location_Key_fk
-           foreign key (LocationKey) references location (Id),
-       constraint location_user_users_UserKey_fk
-           foreign key (UserKey) references security.users (UserKey)
-   );
+    create table location_user
+    (
+        id          int auto_increment,
+        UserKey     varchar(20)   null,
+        LocationKey int           null,
+        Visited     int default 0 null,
+        Weather     varchar(300)  null,
+        date        date          null,
+        constraint location_user_id_uindex
+            unique (id),
+        constraint location_user_location_Key_fk
+            foreign key (LocationKey) references location (Id),
+        constraint location_user_users_UserKey_fk
+            foreign key (UserKey) references security.users (UserKey)
+    );
 
-   alter table location_user
-       add primary key (id);
+    alter table location_user
+        add primary key (id);
 
-   grant delete, insert, select, update on table location_user to sa@localhost;
+    grant delete, insert, select, update on table location_user to sa@localhost;
+
 
