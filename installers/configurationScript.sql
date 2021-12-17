@@ -40,20 +40,22 @@ use Stores;
 
     grant delete, insert, select, update on table zones to sa@localhost;
 
-    create table status
-    (
-        Id         int auto_increment,
-        Status     int         null,
-        Marker     varchar(30) null,
-        ClassStyle varchar(30) null,
-        constraint Status_StatusId_uindex
-            unique (Id)
-    );
 
-    alter table status
-        add primary key (Id);
+   create table status
+   (
+       Id            int auto_increment,
+       Status        int           null,
+       Marker        varchar(30)   null,
+       ClassStyle    varchar(30)   null,
+       ShowDateField int default 0 null,
+       constraint Status_StatusId_uindex
+           unique (Id)
+   );
 
-    grant delete, insert, select, update on table status to sa@localhost;
+   alter table status
+       add primary key (Id);
+
+   grant delete, insert, select, update on table status to sa@localhost;
 
 
     create table stores
@@ -112,6 +114,7 @@ use Stores;
             Date       date        null,
             UserKey    varchar(20) null,
             SellValue  float       null,
+            DateToShow date        null,
             constraint StoreHistorical_status_Id_fk
                 foreign key (StatusId) references status (Id),
             constraint StoreHistorical_stores_Location_fk
