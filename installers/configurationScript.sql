@@ -30,7 +30,7 @@ use Stores;
     create table zones
     (
         Id   int auto_increment,
-        Name int null,
+        Name varchar(50) null,
         constraint Zones_Id_uindex
             unique (Id)
     );
