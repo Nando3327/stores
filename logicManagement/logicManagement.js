@@ -2,6 +2,40 @@ let dm = require('../dataManagement/dataManagement');
 
 module.exports = {
 
+    getZones: function () {
+        return dm.getZones().then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    zones: []
+                }
+            };
+            if(data) {
+                response.data.zones = data;
+            }else{
+                response.message = 'NO EXISTEN ZONAS REGISTRADAS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     getUserPlaces: function (user, mode) {
         if(mode === 'All') {
             return dm.getUserPlaces(user, mode).then(data => {

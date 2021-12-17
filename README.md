@@ -42,23 +42,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 -API
 
     -POST
-        getUserPlaces (user,mode)
-            mode: All, Visited, Next
-            user: userkey from user table  
+        getZones (user?)
+            user: userkey from user table(OPTIONAL not used now)
 
-        getUserPlacesCountry (user,country)
-            country: id from countries table
-            user: userkey from user table
-        
-        getUserCountries (user)
-            user: userkey from user table
-        
-        getUserLocationDetail (name,location)
-            user: userkey from user table
-            location: Id from location table
-
-        setCountryStatus (user, country, favorite)
-            user: userkey from user table
-            country: Id from country table
-            favorite: true or false (1,0) OPTIONAL*0 default*
 

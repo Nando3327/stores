@@ -1,77 +1,123 @@
-use places;
-    create table countries
+use Stores;
+
+    create table businesstypes
     (
         Id   int auto_increment,
-        Name varchar(30) not null,
-        constraint countries_Id_uindex
+        Type varchar(30) null,
+        constraint businessTypes_Id_uindex
             unique (Id)
     );
 
-    alter table countries
+    alter table businesstypes
         add primary key (Id);
 
-    grant delete, insert, select, update on table countries to sa@localhost;
+    grant delete, insert, select, update on table businesstypes to sa@localhost;
 
-    create table countries_user
+
+    create table hangertypes
     (
-        Id       int auto_increment,
-        Country  int           not null,
-        UserKey  varchar(20)   null,
-        Favorite int default 0 not null,
-        Visited  int default 0 null,
-        constraint countries_user_id_uindex
-            unique (Id),
-        constraint countries_user_countries_Id_fk
-            foreign key (Country) references countries (Id),
-        constraint countries_user_users_UserKey_fk
-            foreign key (UserKey) references security.users (UserKey)
+        Id   int auto_increment,
+        Type varchar(30) null,
+        constraint HangerTypes_Id_uindex
+            unique (Id)
     );
 
-    alter table countries_user
+    alter table hangertypes
         add primary key (Id);
 
-    grant delete, insert, select, update on table countries_user to sa@localhost;
+    grant delete, insert, select, update on table hangertypes to sa@localhost;
 
-    create table location
+    create table zones
     (
-        Id          int auto_increment,
-        Latitude    float                    not null,
-        Longitude   float                    not null,
-        Name        varchar(30) charset utf8 not null,
-        Description text                     not null,
-        Image       text                     not null,
-        Country     int                      null,
-        Altimetry   int                      not null,
-        constraint location_key_uindex
-            unique (Id),
-        constraint location_countries_Id_fk
-            foreign key (Country) references countries (Id)
+        Id   int auto_increment,
+        Name int null,
+        constraint Zones_Id_uindex
+            unique (Id)
     );
 
-    alter table location
+    alter table zones
         add primary key (Id);
 
-    grant delete, insert, select, update on table location to sa@localhost;
+    grant delete, insert, select, update on table zones to sa@localhost;
 
-    create table location_user
+    create table status
     (
-        id          int auto_increment,
-        UserKey     varchar(20)   null,
-        LocationKey int           null,
-        Visited     int default 0 null,
-        Weather     varchar(300)  null,
-        date        date          null,
-        constraint location_user_id_uindex
-            unique (id),
-        constraint location_user_location_Key_fk
-            foreign key (LocationKey) references location (Id),
-        constraint location_user_users_UserKey_fk
-            foreign key (UserKey) references security.users (UserKey)
+        Id         int auto_increment,
+        Status     int         null,
+        Marker     varchar(30) null,
+        ClassStyle varchar(30) null,
+        constraint Status_StatusId_uindex
+            unique (Id)
     );
 
-    alter table location_user
-        add primary key (id);
+    alter table status
+        add primary key (Id);
 
-    grant delete, insert, select, update on table location_user to sa@localhost;
+    grant delete, insert, select, update on table status to sa@localhost;
 
 
+    create table stores
+    (
+        Location       int auto_increment,
+        Lat            int           null,
+        Lon            int           null,
+        Name           varchar(100)  null,
+        StatusId       int           null,
+        ZoneId         int           null,
+        Description    varchar(5000) null,
+        Image          varchar(6500) null,
+        BusinessTypeId int           null,
+        HangerTypeId   int           null,
+        Ruc            varchar(20)   null,
+        constraint stores_Location_uindex
+            unique (Location),
+        constraint stores_businesstypes_Id_fk
+            foreign key (BusinessTypeId) references businesstypes (Id),
+        constraint stores_status_StatusId_fk
+            foreign key (StatusId) references status (Id),
+        constraint stores_zones_Id_fk
+            foreign key (ZoneId) references zones (Id)
+    );
+
+    alter table stores
+        add primary key (Location);
+
+    grant delete, insert, select, update on table stores to sa@localhost;
+
+
+
+    create table address
+        (
+            Categorie  varchar(5)   not null,
+            Value      varchar(100) not null,
+            LocationId int          not null,
+            Type       varchar(5)   null,
+            constraint address_value_uindex
+                unique (Value),
+            constraint address_users_UserKey_fk
+                foreign key (LocationId) references stores (Location)
+                    on delete cascade
+        );
+
+        alter table address
+            add primary key (Value);
+
+        grant delete, insert, select, update on table address to sa@localhost;
+
+
+        create table storehistorical
+        (
+            LocationId int         null,
+            StatusId   int         null,
+            Date       date        null,
+            UserKey    varchar(20) null,
+            SellValue  float       null,
+            constraint StoreHistorical_status_Id_fk
+                foreign key (StatusId) references status (Id),
+            constraint StoreHistorical_stores_Location_fk
+                foreign key (LocationId) references stores (Location),
+            constraint StoreHistorical_users_UserKey_fk
+                foreign key (UserKey) references security.users (UserKey)
+        );
+
+        grant delete, insert, select, update on table storehistorical to sa@localhost;

@@ -33,9 +33,42 @@ let errorResponse = {
     message: ''
 };
 
+app.post('/getZones', function (req, res) {
+    lm.getZones().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
 
-app.post('/getUserPlaces', function (req, res) {
-    if(!req.body.user || !req.body.mode) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/getStores', function (req, res) {
+    if(!req.body.user) {
         respuesta = {
             error: true,
             code: 6000,
@@ -139,6 +172,6 @@ app.post('/setCountryStatus', function (req, res) {
     }
 });
 
-http.createServer(app).listen(6001, () => {
-    console.log('Server started at http://localhost:6001');
+http.createServer(app).listen(6002, () => {
+    console.log('Server started at http://localhost:6002');
 });
