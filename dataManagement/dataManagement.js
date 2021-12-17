@@ -30,6 +30,43 @@ module.exports = {
         });
     },
 
+    getBusinessTypes: function () {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT BT.Id as id, BT.Type as value ' +
+                    'FROM STORES.businesstypes BT ';
+                connection.query(query, [], (err, rows) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    getHangerTypes: function () {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT HT.Id as id, HT.Type as value ' +
+                    'FROM STORES.hangertypes HT ';
+                connection.query(query, [], (err, rows) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 
 
 

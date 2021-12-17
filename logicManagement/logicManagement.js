@@ -23,6 +23,48 @@ module.exports = {
         });
     },
 
+    getBusinessTypes: function () {
+        return dm.getBusinessTypes().then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    businessType: []
+                }
+            };
+            if(data) {
+                response.data.businessType = data;
+            }else{
+                response.message = 'NO EXISTEN TIPOS DE NEGOCIO REGISTRADOS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
+    getHangerTypes: function () {
+        return dm.getHangerTypes().then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    hangerType: []
+                }
+            };
+            if(data) {
+                response.data.hangerType = data;
+            }else{
+                response.message = 'NO EXISTEN TIPOS DE PERCHAS REGISTRADOS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
 
 
 

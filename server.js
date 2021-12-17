@@ -45,9 +45,29 @@ app.post('/getZones', function (req, res) {
     });
 });
 
+app.post('/getBusinessTypes', function (req, res) {
+    lm.getBusinessTypes().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
 
-
-
+app.post('/getHangerTypes', function (req, res) {
+    lm.getHangerTypes().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
 
 
 

@@ -45,4 +45,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         getZones (user?)
             user: userkey from user table(OPTIONAL not used now)
 
+        getBusinessType ()
+
+        getHangerTypes ()
 
