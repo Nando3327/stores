@@ -49,3 +49,21 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
         getHangerTypes ()
 
+        saveStore(zoneId, statusId, name, lat, lon, description,
+        image, businessTypeId, hangerTypeId, ruc, address, mode, user)
+            zoneId: Id from table zones
+            statusId: Id from table status
+            name: Store name
+            lat: store latitude
+            lon: store longitude
+            description: store description
+            image: store image BASE64
+            businessTypeId: Id from table businessType
+            hangerTypeId: Id from table HangerType
+            ruc: Store ruc
+            address: Array of addresses based on structure of table Address
+                categorie: PR principal
+                value: address value
+                type: CEL|ADD|TEL|EM
+            mode: edit|new,
+            user: UserKey of table SECURITY.users
