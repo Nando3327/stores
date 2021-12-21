@@ -126,6 +126,40 @@ module.exports = {
         });
     },
 
+    addAddress: function (addressStores) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('INSERT STORES.address (Categorie, Value, LocationId, Type) VALUES ?', [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    deleteAddressByLocationId: function (locationId) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('DELETE FROM STORES.address WHERE LocationId = ?', [locationId], (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
 
 
 

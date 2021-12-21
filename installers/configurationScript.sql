@@ -105,39 +105,36 @@ use Stores;
 
 
     create table address
-        (
-            Categorie  varchar(5)   not null,
-            Value      varchar(100) not null,
-            LocationId int          not null,
-            Type       varchar(5)   null,
-            constraint address_value_uindex
-                unique (Value),
-            constraint address_users_UserKey_fk
-                foreign key (LocationId) references stores (Location)
-                    on delete cascade
-        );
+    (
+        Categorie  varchar(5)   not null,
+        Value      varchar(300) not null,
+        LocationId int          not null,
+        Type       varchar(5)   null,
+        constraint address_users_UserKey_fk
+            foreign key (LocationId) references stores (Location)
+                on delete cascade
+    );
 
-        alter table address
-            add primary key (Value);
+    grant delete, insert, select, update on table address to sa@localhost;
 
-        grant delete, insert, select, update on table address to sa@localhost;
+    create table storehistorical
+    (
+                    LocationId  int           null,
+                    StatusId    int           null,
+                    Date        date          null,
+                    UserKey     varchar(20)   null,
+                    SellValue   float         null,
+                    DateToShow  date          null,
+                    Description varchar(1000) null,
+                    constraint StoreHistorical_status_Id_fk
+                        foreign key (StatusId) references status (Id),
+                    constraint StoreHistorical_stores_Location_fk
+                        foreign key (LocationId) references stores (Location),
+                    constraint StoreHistorical_users_UserKey_fk
+                        foreign key (UserKey) references security.users (UserKey)
+                );
+
+    grant delete, insert, select, update on table storehistorical to sa@localhost;
 
 
-        create table storehistorical
-        (
-            LocationId  int           null,
-            StatusId    int           null,
-            Date        date          null,
-            UserKey     varchar(20)   null,
-            SellValue   float         null,
-            DateToShow  date          null,
-            Description varchar(1000) null,
-            constraint StoreHistorical_status_Id_fk
-                foreign key (StatusId) references status (Id),
-            constraint StoreHistorical_stores_Location_fk
-                foreign key (LocationId) references stores (Location),
-            constraint StoreHistorical_users_UserKey_fk
-                foreign key (UserKey) references security.users (UserKey)
-        );
 
-        grant delete, insert, select, update on table storehistorical to sa@localhost;

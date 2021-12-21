@@ -73,7 +73,7 @@ app.post('/saveStore', function (req, res) {
     if(!req.body.zoneId || !req.body.statusId || !req.body.name ||
         !req.body.lat || !req.body.lon || !req.body.description ||
         !req.body.image || !req.body.businessTypeId || !req.body.hangerTypeId ||
-        !req.body.ruc || !req.body.mode || !req.body.user) {
+        !req.body.ruc || !req.body.address || !req.body.mode || !req.body.user) {
         respuesta = {
             error: true,
             code: 6000,
@@ -88,7 +88,7 @@ app.post('/saveStore', function (req, res) {
         if(req.body.mode === 'edit') {
             store.setLocation(req.body.location)
         }
-        lm.saveStore(store, req.body.mode, req.body.user).then(data => {
+        lm.saveStore(store, req.body.mode, req.body.address, req.body.user).then(data => {
             respuesta.code = data.code;
             respuesta.data = data.data;
             respuesta.message = data.message;
