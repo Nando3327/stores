@@ -90,6 +90,8 @@ use Stores;
             unique (Location),
         constraint stores_businesstypes_Id_fk
             foreign key (BusinessTypeId) references businesstypes (Id),
+        constraint stores_hangertypes_Id_fk
+            foreign key (HangerTypeId) references hangertypes (Id),
         constraint stores_status_StatusId_fk
             foreign key (StatusId) references status (Id),
         constraint stores_zones_Id_fk
@@ -119,20 +121,26 @@ use Stores;
 
     create table storehistorical
     (
-                    LocationId  int           null,
-                    StatusId    int           null,
-                    Date        date          null,
-                    UserKey     varchar(20)   null,
-                    SellValue   float         null,
-                    DateToShow  date          null,
-                    Description varchar(1000) null,
-                    constraint StoreHistorical_status_Id_fk
-                        foreign key (StatusId) references status (Id),
-                    constraint StoreHistorical_stores_Location_fk
-                        foreign key (LocationId) references stores (Location),
-                    constraint StoreHistorical_users_UserKey_fk
-                        foreign key (UserKey) references security.users (UserKey)
-                );
+        Id          int auto_increment,
+        LocationId  int           null,
+        StatusId    int           null,
+        Date        date          null,
+        UserKey     varchar(20)   null,
+        SellValue   float         null,
+        DateToShow  date          null,
+        Description varchar(1000) null,
+        constraint storehistorical_Id_uindex
+            unique (Id),
+        constraint StoreHistorical_status_Id_fk
+            foreign key (StatusId) references status (Id),
+        constraint StoreHistorical_stores_Location_fk
+            foreign key (LocationId) references stores (Location),
+        constraint StoreHistorical_users_UserKey_fk
+            foreign key (UserKey) references security.users (UserKey)
+    );
+
+    alter table storehistorical
+        add primary key (Id);
 
     grant delete, insert, select, update on table storehistorical to sa@localhost;
 
