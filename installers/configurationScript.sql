@@ -13,6 +13,13 @@ use Stores;
 
     grant delete, insert, select, update on table businesstypes to sa@localhost;
 
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (1, 'Mini Marker');
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (2, 'Tienda');
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (3, 'Mini tienda');
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (4, 'Fruteria');
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (5, 'Restaurante');
+    INSERT INTO stores.businesstypes (Id, Type) VALUES (6, 'Otro');
+
 
     create table hangertypes
     (
@@ -44,8 +51,8 @@ use Stores;
    create table status
    (
        Id            int auto_increment,
-       Status        int           null,
-       Marker        varchar(30)   null,
+       Status        varchar(300)  null,
+       Marker        varchar(300)   null,
        ClassStyle    varchar(30)   null,
        ShowDateField int default 0 null,
        constraint Status_StatusId_uindex
@@ -58,11 +65,19 @@ use Stores;
    grant delete, insert, select, update on table status to sa@localhost;
 
 
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (2, 'Punto por visitar', './assets/icon/blue-pointer.svg', 'blueTag', 0);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (3, 'Punto visitado sin venta', './assets/icon/green-pointer.svg', 'greenTag', 0);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (4, 'Pedido', './assets/icon/yellow-pointer.svg', 'yellowTag', 0);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (5, 'Regreso', './assets/icon/orange-pointer.svg', 'orangeTag', 1);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (6, 'Cancelado', './assets/icon/red-pointer.svg', 'redTag', 0);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (7, 'Cliente nuevo sin compras', './assets/icon/white-pointer.svg', 'whiteTag', 0);
+    INSERT INTO stores.status (Id, Status, Marker, ClassStyle, ShowDateField) VALUES (8, 'No cliente', './assets/icon/black-pointer.svg', 'blackTag', 0);
+
     create table stores
     (
         Location       int auto_increment,
-        Lat            int           null,
-        Lon            int           null,
+        Lat            float         null,
+        Lon            float         null,
         Name           varchar(100)  null,
         StatusId       int           null,
         ZoneId         int           null,
@@ -85,6 +100,7 @@ use Stores;
         add primary key (Location);
 
     grant delete, insert, select, update on table stores to sa@localhost;
+
 
 
 

@@ -1,5 +1,28 @@
 let dm = require('../dataManagement/dataManagement');
 
+
+let saveNewStore = function (store) {
+    return new Promise((resolve, reject) => {
+        dm.saveNewStore(store).then(data => {
+            resolve(data);
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+};
+
+let updateStore = function (store) {
+    return new Promise((resolve, reject) => {
+        dm.updateStore(store).then(data => {
+            resolve(data);
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+};
+
 module.exports = {
 
     getZones: function () {
@@ -65,52 +88,21 @@ module.exports = {
         });
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    getUserPlaces: function (user, mode) {
-        if(mode === 'All') {
-            return dm.getUserPlaces(user, mode).then(data => {
-                const response = {
-                    code: 200,
-                    message: 'OK',
-                    data: {
-                        places: []
-                    }
-                };
-                if(data) {
-                    response.data.places = data;
-                }else{
-                    response.message = 'USUARIO SIN UBICACIONES';
-                }
-                return response;
-            }).catch(e => {
-                console.log(e);
-                throw e
-            });
-        } else if(mode === 'Visited'){
-            return dm.getUserPlacesByVisited(user, 1).then(data => {
-                const response = {
-                    code: 200,
-                    message: 'OK',
-                    data: {
-                        places: []
-                    }
-                };
-                if(data) {
-                    response.data.places = data;
-                }else{
-                    response.message = 'USUARIO SIN UBICACIONES';
+    saveStore: function (store, mode) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        if(mode === 'edit') {
+            return updateStore(store).then(data => {
+                if (!data) {
+                    response.code = 8002;
+                    response.message = 'ERROR AL EDITAR TIENDA';
+                } else {
+                    response.data.message = 'TIENDA ACTUALIZADA'
                 }
                 return response;
             }).catch(e => {
@@ -118,18 +110,12 @@ module.exports = {
                 throw e
             });
         } else {
-            return dm.getUserPlacesByVisited(user, 0).then(data => {
-                const response = {
-                    code: 200,
-                    message: 'OK',
-                    data: {
-                        places: []
-                    }
-                };
-                if(data) {
-                    response.data.places = data;
-                }else{
-                    response.message = 'USUARIO SIN UBICACIONES';
+            return saveNewStore(store).then(data => {
+                if (!data) {
+                    response.code = 8001;
+                    response.message = 'ERROR AL GUARDAR TIENDA';
+                }else {
+                    response.data.message = 'TIENDA CREADA'
                 }
                 return response;
             }).catch(e => {
@@ -137,94 +123,5 @@ module.exports = {
                 throw e
             });
         }
-
-
     },
-
-    getUserPlacesCountry: function (user, country) {
-        return dm.getUserPlacesCountry(user, country).then(data => {
-            const response = {
-                code: 200,
-                message: 'OK',
-                data: {
-                    places: []
-                }
-            };
-            if(data) {
-                response.data.places = data;
-            }else{
-                response.message = 'USUARIO SIN UBICACIONES';
-            }
-            return response;
-        }).catch(e => {
-            console.log(e);
-            throw e
-        });
-    },
-
-    getUserCountries: function (user) {
-        return dm.getUserCountries(user).then(data => {
-            const response = {
-                code: 200,
-                message: 'OK',
-                data: {
-                    countries: []
-                }
-            };
-            if(data) {
-                response.data.countries = data;
-            }else{
-                response.message = 'USUARIO SIN PAISES';
-            }
-            return response;
-        }).catch(e => {
-            console.log(e);
-            throw e
-        });
-    },
-
-    getUserLocationDetail: function (user, location) {
-        return dm.getUserLocationDetail(user, location).then(data => {
-            const response = {
-                code: 200,
-                message: 'OK',
-                data: {
-                    details: []
-                }
-            };
-            if(data) {
-                response.data.details = data;
-            }else{
-                response.message = 'USUARIO SIN DETALLES DE UBICACION';
-            }
-            return response;
-        }).catch(e => {
-            console.log(e);
-            throw e
-        });
-    },
-
-    setCountryStatus: function (user, country, favorite = 0) {
-        return dm.setCountryStatus(user, country, favorite).then(data => {
-            const response = {
-                code: 200,
-                message: 'OK',
-                data: {
-                    message: ''
-                }
-            };
-            if(data) {
-                response.data.message = data;
-            }else{
-                response.code = 6002
-                response.message = 'ERROR EN ACTUALIZACION DEL STATUS';
-            }
-            return response;
-        }).catch(e => {
-            console.log(e);
-            throw e
-        });
-    },
-
-
 };

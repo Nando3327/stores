@@ -1,5 +1,5 @@
 const lm = require('./logicManagement/logicManagement');
-
+const StoreModel = require('./models/store.model');
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
@@ -69,118 +69,26 @@ app.post('/getHangerTypes', function (req, res) {
     });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-app.post('/getStores', function (req, res) {
-    if(!req.body.user) {
+app.post('/saveStore', function (req, res) {
+    if(!req.body.zoneId || !req.body.statusId || !req.body.name ||
+        !req.body.lat || !req.body.lon || !req.body.description ||
+        !req.body.image || !req.body.businessTypeId || !req.body.hangerTypeId ||
+        !req.body.ruc || !req.body.mode) {
         respuesta = {
             error: true,
             code: 6000,
             message: 'Datos incompletos'
         };
         res.send(respuesta);
-    } else{
-        lm.getUserPlaces(req.body.user, req.body.mode).then(data => {
-            respuesta.code = data.code;
-            respuesta.data = data.data;
-            respuesta.message = data.message;
-            res.send(respuesta);
-        }).catch(err => {
-            errorResponse.message = err.message;
-            res.send(errorResponse);
-        });
-    }
-});
-
-app.post('/getUserPlacesCountry', function (req, res) {
-    if(!req.body.user || !req.body.country) {
-        respuesta = {
-            error: true,
-            code: 6000,
-            message: 'Datos incompletos'
-        };
-        res.send(respuesta);
-    } else{
-        lm.getUserPlacesCountry(req.body.user, req.body.country).then(data => {
-            respuesta.code = data.code;
-            respuesta.data = data.data;
-            respuesta.message = data.message;
-            res.send(respuesta);
-        }).catch(err => {
-            errorResponse.message = err.message;
-            res.send(errorResponse);
-        });
-    }
-});
-
-app.post('/getUserCountries', function (req, res) {
-    if(!req.body.user) {
-        respuesta = {
-            error: true,
-            code: 6000,
-            message: 'Datos incompletos'
-        };
-        res.send(respuesta);
-    } else{
-        lm.getUserCountries(req.body.user).then(data => {
-            respuesta.code = data.code;
-            respuesta.data = data.data;
-            respuesta.message = data.message;
-            res.send(respuesta);
-        }).catch(err => {
-            errorResponse.message = err.message;
-            res.send(errorResponse);
-        });
-    }
-});
-
-app.post('/getUserLocationDetail', function (req, res) {
-    if(!req.body.user || !req.body.location) {
-        respuesta = {
-            error: true,
-            code: 6000,
-            message: 'Datos incompletos'
-        };
-        res.send(respuesta);
-    } else{
-        lm.getUserLocationDetail(req.body.user, req.body.location).then(data => {
-            respuesta.code = data.code;
-            respuesta.data = data.data;
-            respuesta.message = data.message;
-            res.send(respuesta);
-        }).catch(err => {
-            errorResponse.message = err.message;
-            res.send(errorResponse);
-        });
-    }
-});
-
-app.post('/setCountryStatus', function (req, res) {
-    if(!req.body.user || !req.body.country) {
-        respuesta = {
-            error: true,
-            code: 6000,
-            message: 'Datos incompletos'
-        };
-        res.send(respuesta);
-    } else{
-        lm.setCountryStatus(req.body.user, req.body.country, req.body.favorite).then(data => {
+    } else {
+        const store = new StoreModel(req.body.zoneId, req.body.statusId, req.body.name,
+            req.body.lat, req.body.lon, req.body.description,
+            req.body.image, req.body.businessTypeId, req.body.hangerTypeId,
+            req.body.ruc);
+        if(req.body.mode === 'edit') {
+            store.setLocation(req.body.location)
+        }
+        lm.saveStore(store, req.body.mode).then(data => {
             respuesta.code = data.code;
             respuesta.data = data.data;
             respuesta.message = data.message;

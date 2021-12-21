@@ -68,7 +68,46 @@ module.exports = {
         });
     },
 
+    saveNewStore: function (store) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('INSERT STORES.stores SET ?', store, (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 
+    updateStore: function (store) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'UPDATE STORES.stores ' +
+                    'SET Lat = ?, Lon = ?, Name = ?, ' +
+                    'ZoneId = ?, Description = ?, Image = ?, ' +
+                    'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ? ' +
+                    'WHERE Location = ?';
+                connection.query(query, [store.Lat, store.Lon, store.Name,
+                    store.ZoneId, store.Description, store.Image,
+                    store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.Location], (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 
 
 
