@@ -125,12 +125,13 @@ use Stores;
 
         create table storehistorical
         (
-            LocationId int         null,
-            StatusId   int         null,
-            Date       date        null,
-            UserKey    varchar(20) null,
-            SellValue  float       null,
-            DateToShow date        null,
+            LocationId  int           null,
+            StatusId    int           null,
+            Date        date          null,
+            UserKey     varchar(20)   null,
+            SellValue   float         null,
+            DateToShow  date          null,
+            Description varchar(1000) null,
             constraint StoreHistorical_status_Id_fk
                 foreign key (StatusId) references status (Id),
             constraint StoreHistorical_stores_Location_fk

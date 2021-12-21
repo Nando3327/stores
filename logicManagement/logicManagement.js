@@ -1,5 +1,5 @@
 let dm = require('../dataManagement/dataManagement');
-
+const StoreHistoricalModel = require('../models/storeHistorical.model');
 
 let saveNewStore = function (store) {
     return new Promise((resolve, reject) => {
@@ -22,6 +22,18 @@ let updateStore = function (store) {
         });
     });
 };
+
+let addStoreHistorical = function (storeHistorical) {
+    return new Promise((resolve, reject) => {
+        dm.addStoreHistorical(storeHistorical).then(data => {
+            resolve(data);
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+};
+
 
 module.exports = {
 
@@ -88,7 +100,7 @@ module.exports = {
         });
     },
 
-    saveStore: function (store, mode) {
+    saveStore: function (store, mode, userKey) {
         const response = {
             code: 200,
             message: 'OK',
@@ -96,15 +108,26 @@ module.exports = {
                 message: ''
             }
         };
+        const storeHistorical = new StoreHistoricalModel(store.Location, store.StatusId, new Date().toISOString().split('T')[0], userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
         if(mode === 'edit') {
             return updateStore(store).then(data => {
                 if (!data) {
                     response.code = 8002;
                     response.message = 'ERROR AL EDITAR TIENDA';
-                } else {
-                    response.data.message = 'TIENDA ACTUALIZADA'
+                    return response;
                 }
-                return response;
+                response.data.message = 'TIENDA ACTUALIZADA';
+                return addStoreHistorical(storeHistorical).then(data => {
+                    if (!data) {
+                        response.message = 'ERROR AL GUARDAR HISTORICOS';
+                        return response;
+                    }
+                    return response;
+                }).catch(e => {
+                    console.log(e);
+                    response.message = 'ERROR AL GUARDAR HISTORICOS CATCH';
+                    return response;
+                });
             }).catch(e => {
                 console.log(e);
                 throw e
@@ -114,10 +137,22 @@ module.exports = {
                 if (!data) {
                     response.code = 8001;
                     response.message = 'ERROR AL GUARDAR TIENDA';
-                }else {
-                    response.data.message = 'TIENDA CREADA'
+                    return response;
                 }
-                return response;
+                storeHistorical.setLocationId(data.insertId);
+                storeHistorical.setDescription("TIENDA CREADA");
+                response.data.message = 'TIENDA CREADA';
+                return addStoreHistorical(storeHistorical).then(data => {
+                    if (!data) {
+                        response.message = 'ERROR AL GUARDAR HISTORICOS';
+                        return response;
+                    }
+                    return response;
+                }).catch(e => {
+                    console.log(e);
+                    response.message = 'ERROR AL GUARDAR HISTORICOS CATCH';
+                    return response;
+                });
             }).catch(e => {
                 console.log(e);
                 throw e

@@ -109,7 +109,22 @@ module.exports = {
         });
     },
 
-
+    addStoreHistorical: function (storeHistorical) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('INSERT STORES.storehistorical SET ?', storeHistorical, (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 
 
 
