@@ -108,14 +108,20 @@ use Stores;
 
     create table address
     (
+        Id         int auto_increment,
         Categorie  varchar(5)   not null,
         Value      varchar(300) not null,
         LocationId int          not null,
         Type       varchar(5)   null,
+        constraint address_Id_uindex
+            unique (Id),
         constraint address_users_UserKey_fk
             foreign key (LocationId) references stores (Location)
                 on delete cascade
     );
+
+    alter table address
+        add primary key (Id);
 
     grant delete, insert, select, update on table address to sa@localhost;
 
@@ -124,7 +130,7 @@ use Stores;
         Id          int auto_increment,
         LocationId  int           null,
         StatusId    int           null,
-        Date        date          null,
+        Date        datetime      null,
         UserKey     varchar(20)   null,
         SellValue   float         null,
         DateToShow  date          null,

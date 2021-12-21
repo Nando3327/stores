@@ -160,132 +160,29 @@ module.exports = {
         });
     },
 
-
-
-
-
-
-    getUserPlaces: function (user) {
+    getAllStores: function () {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
-                    'L.Name as name, L.Description as description, L.Image as image, LU.Visited as visited ' +
-                    'FROM PLACES.location L ' +
-                    'INNER JOIN PLACES.location_user LU ON L.Id = LU.LocationKey ' +
-                    'WHERE LU.UserKey = ? ';
-                connection.query(query, [user], (err, rows) => {
+                const query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
+                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, ' +
+                    'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
+                    'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
+                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, sh.Id as historicalId, sh.SellValue as sellValue ' +
+                    'FROM STORES.stores s ' +
+                    'INNER JOIN STORES.storehistorical sh on s.Location = sh.LocationId ' +
+                    'INNER JOIN STORES.address a on s.Location = a.LocationId ' +
+                    'INNER JOIN STORES.status st on s.StatusId = st.Id ' +
+                    'INNER JOIN STORES.businesstypes b on s.BusinessTypeId = b.Id ' +
+                    'INNER JOIN STORES.hangertypes h on s.HangerTypeId = h.Id ' +
+                    'INNER JOIN STORES.zones z on s.ZoneId = z.Id ' +
+                    'WHERE a.Categorie = "PR" ' +
+                    'ORDER BY sh.Date desc';
+                connection.query(query, [], (err, rows) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
                     }
                     resolve((rows && rows.length > 0) ? rows : undefined);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    getUserPlacesCountry: function (user, country) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
-                    'L.Name as name, L.Description as description, L.Image as image, LU.Visited as visited ' +
-                    'FROM PLACES.countries C ' +
-                    'INNER JOIN PLACES.location L ON L.Country = C.Id ' +
-                    'INNER JOIN PLACES.location_user LU ON L.Id = LU.LocationKey ' +
-                    'WHERE LU.UserKey = ? and C.Id = ? ';
-                connection.query(query, [user, country], (err, rows) => {
-                    if (err) {
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve((rows && rows.length > 0) ? rows : undefined);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    getUserPlacesByVisited: function (user, visited) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'SELECT L.Id as location, L.Latitude as lat, L.Longitude as lon, ' +
-                    'L.Name as name, L.Description as description, L.Image as image, LU.Visited as visited ' +
-                    'FROM PLACES.location L ' +
-                    'INNER JOIN PLACES.location_user LU ON L.Id = LU.LocationKey ' +
-                    'WHERE LU.UserKey = ? and LU.visited = ? ';
-                connection.query(query, [user, visited], (err, rows) => {
-                    if (err) {
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve((rows && rows.length > 0) ? rows : undefined);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    getUserCountries: function (user) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'SELECT C.Name as countryName, C.Id as countryId, CU.Favorite as favorite ' +
-                    'FROM PLACES.countries C ' +
-                    'INNER JOIN PLACES.countries_user CU ON C.Id = CU.Country ' +
-                    'WHERE CU.UserKey = ? ';
-                connection.query(query, [user], (err, rows) => {
-                    if (err) {
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve((rows && rows.length > 0) ? rows : undefined);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    getUserLocationDetail: function (user, location) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'SELECT LU.Weather as weather, L.Altimetry as altimetry, LU.Date as date ' +
-                    'FROM Places.location L ' +
-                    'INNER JOIN Places.location_user LU ON L.Id = LU.LocationKey ' +
-                    'WHERE LU.UserKey = ? and LU.LocationKey = ? ';
-                connection.query(query, [user, location], (err, rows) => {
-                    if (err) {
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve((rows && rows.length > 0) ? rows : undefined);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    setCountryStatus: function (user, country, favorite) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'UPDATE Places.countries_user ' +
-                    'SET Favorite = ? ' +
-                    'WHERE UserKey = ? and Country = ?';
-                connection.query(query, [favorite, user, country], (err, res) => {
-                    if (err) {
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve('UPDATE REALIZADO CON EXITO!');
                 });
             } catch (e) {
                 console.log(e);

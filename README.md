@@ -64,6 +64,6 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             address: Array of addresses based on structure of table Address
                 categorie: PR principal
                 value: address value
-                type: CEL|ADD|TEL|EM
+                type: CEL:celular | ADD:address | TEL:phone | EM:email | HN:housenumber
             mode: edit|new,
             user: UserKey of table SECURITY.users

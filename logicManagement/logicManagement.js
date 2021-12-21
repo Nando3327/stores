@@ -1,6 +1,10 @@
 let dm = require('../dataManagement/dataManagement');
 const StoreHistoricalModel = require('../models/storeHistorical.model');
+const StoreHistoricalResponseModel = require('../models/storeHistorical-response.model');
 const AddressModel = require('../models/address.model');
+const AddressResponseModel = require('../models/address-response.model');
+const StoreResponseModel = require('../models/store-response.model');
+const historicalSizeData = 7;
 
 let saveNewStore = function (store) {
     return new Promise((resolve, reject) => {
@@ -53,6 +57,41 @@ let overrideAddresses = function (locationId, addressStores) {
             reject(e);
         });
     });
+};
+
+let getAddressesStore = function (locationId, stores) {
+    const storeData = stores.filter((store) => store.location === locationId) || [];
+    const addressStoreAdded = [];
+    const address = [];
+    storeData.forEach((store) => {
+        if(addressStoreAdded.indexOf(store.addressId) === -1) {
+            const addressStore = new AddressResponseModel(locationId, store.addressCategorie, store.address, store.addressType);
+            address.push(addressStore);
+            addressStoreAdded.push(store.addressId);
+        }
+    })
+    return address;
+};
+
+let getHistoricalStore = function (locationId, stores) {
+    const storeData = stores.filter((store) => store.location === locationId) || [];
+    const historicalStoreAdded = [];
+    const historical = [];
+    storeData.forEach((store) => {
+        if(historicalStoreAdded.indexOf(store.historicalId) === -1) {
+            let date = '';
+            try {
+                date = new Date(store.date).toISOString().split('T')[0];
+            } catch(_) {
+                date = store.date;
+                console.log('ERROR AL TRANSFORMAR FECHA', store.date);
+            }
+            const historicalData = new StoreHistoricalResponseModel(locationId, store.statusHistorical, date, store.sellValue);
+            historical.push(historicalData);
+            historicalStoreAdded.push(store.historicalId);
+        }
+    })
+    return historical;
 };
 
 let saveHistoricalAddress = function (storeHistorical, addressStores, response, locationId) {
@@ -144,6 +183,38 @@ module.exports = {
         });
     },
 
+    getAllStores: function () {
+        return dm.getAllStores().then(stores => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    stores: []
+                }
+            };
+            if(stores) {
+                const storesData = [];
+                const storesAdded = [];
+                stores.forEach((store) => {
+                    if(storesAdded.indexOf(store.location) === -1) {
+                        const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle)
+                        responseObject.setAddresses(getAddressesStore(store.location, stores));
+                        responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalSizeData));
+                        storesData.push(responseObject);
+                        storesAdded.push(store.location);
+                    }
+                })
+                response.data.stores = storesData;
+            }else{
+                response.message = 'NO EXISTEN TIENDAS REGISTRADAS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
     saveStore: function (store, mode, address, userKey) {
         const response = {
             code: 200,
@@ -152,7 +223,10 @@ module.exports = {
                 message: ''
             }
         };
-        const storeHistorical = new StoreHistoricalModel(store.Location, store.StatusId, new Date().toISOString().split('T')[0], userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
+        const currentDate = new Date();
+        const time = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+        const date = currentDate.toISOString().split('T')[0] + ' ' + time;
+        const storeHistorical = new StoreHistoricalModel(store.Location, store.StatusId, date, userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
         const addressStores = [];
         address.forEach((add) => {
             const addressStore = new AddressModel(store.Location, add.categorie, add.value, add.type);
