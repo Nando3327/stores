@@ -112,6 +112,27 @@ app.post('/getAllStores', function (req, res) {
     });
 });
 
+app.post('/changeStoreStatus', function (req, res) {
+    if(!req.body.locationId || !req.body.statusId || !req.body.user || req.body.sellValue === null || req.body.sellValue === undefined || !req.body.date) {
+        respuesta = {
+            error: true,
+            code: 6000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else {
+        lm.changeStoreStatus(req.body.locationId, req.body.statusId, req.body.user, req.body.sellValue, req.body.date).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');
 });

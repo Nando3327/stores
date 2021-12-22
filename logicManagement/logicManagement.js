@@ -6,6 +6,12 @@ const AddressResponseModel = require('../models/address-response.model');
 const StoreResponseModel = require('../models/store-response.model');
 const historicalSizeData = 7;
 
+let getCurrentDateTimeMysql = function () {
+    const currentDate = new Date();
+    const time = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
+    return currentDate.toISOString().split('T')[0] + ' ' + time;
+}
+
 let saveNewStore = function (store) {
     return new Promise((resolve, reject) => {
         dm.saveNewStore(store).then(data => {
@@ -116,17 +122,20 @@ let saveHistoricalAddress = function (storeHistorical, addressStores, response, 
         }
         return overrideAddresses(locationId, addressStores).then(data => {
             if (!data) {
+                response.code = 6002;
                 response.message += ' ERROR AL GUARDAR DIRECCIONES';
                 return response;
             }
             return response;
         }).catch(e => {
             console.log(e);
+            response.code = 6002;
             response.message = 'ERROR AL GUARDAR CATCH';
             return response;
         });
     }).catch(e => {
         console.log(e);
+        response.code = 6002;
         response.message = 'ERROR AL GUARDAR HISTORICOS CATCH';
         return response;
     });
@@ -227,9 +236,7 @@ module.exports = {
                 message: ''
             }
         };
-        const currentDate = new Date();
-        const time = currentDate.getHours() + ':' + currentDate.getMinutes() + ':' + currentDate.getSeconds();
-        const date = currentDate.toISOString().split('T')[0] + ' ' + time;
+        const date = getCurrentDateTimeMysql();
         const storeHistorical = new StoreHistoricalModel(store.Location, store.StatusId, date, userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
         const addressStores = [];
         address.forEach((add) => {
@@ -239,7 +246,7 @@ module.exports = {
         if(mode === 'edit') {
             return updateStore(store).then(data => {
                 if (!data) {
-                    response.code = 8002;
+                    response.code = 6002;
                     response.message = 'ERROR AL EDITAR TIENDA';
                     return response;
                 }
@@ -252,7 +259,7 @@ module.exports = {
         } else {
             return saveNewStore(store).then(data => {
                 if (!data) {
-                    response.code = 8001;
+                    response.code = 6001;
                     response.message = 'ERROR AL GUARDAR TIENDA';
                     return response;
                 }
@@ -269,4 +276,38 @@ module.exports = {
             });
         }
     },
+
+    changeStoreStatus: function (locationId, statusId, userKey, sellValue, dateToShow) {
+        return dm.changeStoreStatus(locationId, statusId).then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {}
+            };
+            if(data) {
+                response.data.message = 'ESTADO ACTUALIZADO';
+                const date = getCurrentDateTimeMysql();
+                const storeHistorical = new StoreHistoricalModel(locationId, statusId, date, userKey, sellValue, dateToShow, 'ESTATUS ACTUALIZADO');
+                return addStoreHistorical(storeHistorical).then(data => {
+                    if(!data) {
+                        response.code = 6003;
+                        response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO';
+                    }
+                    return response
+                }).catch(e => {
+                    console.log(e);
+                    response.code = 6003;
+                    response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO CATCH';
+                    return response
+                });
+            }else{
+                response.code = 6003;
+                response.message = 'ERROR AL ACTUALIZAR ESTADO';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    }
 };

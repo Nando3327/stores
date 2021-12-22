@@ -50,7 +50,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         getHangerTypes ()
 
         saveStore(zoneId, statusId, name, lat, lon, description,
-        image, businessTypeId, hangerTypeId, ruc, address, mode, user)
+                image, businessTypeId, hangerTypeId, ruc, address, mode, user)
             zoneId: Id from table zones
             statusId: Id from table status
             name: Store name
@@ -67,3 +67,10 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
                 type: CEL:celular | ADD:address | TEL:phone | EM:email | HN:housenumber
             mode: edit|new,
             user: UserKey of table SECURITY.users
+
+        changeStoreStatus(locationId, statusId, user, sellValue, date)
+            locationId: Id from table store
+            statusId: Id from table status
+            user: UserKey of table SECURITY.users
+            sellValue: value of a receipt done
+            date: date to do a return in a receive action

@@ -91,11 +91,11 @@ module.exports = {
                 const query = 'UPDATE STORES.stores ' +
                     'SET Lat = ?, Lon = ?, Name = ?, ' +
                     'ZoneId = ?, Description = ?, Image = ?, ' +
-                    'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ? ' +
+                    'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ?, StatusId = ? ' +
                     'WHERE Location = ?';
                 connection.query(query, [store.Lat, store.Lon, store.Name,
                     store.ZoneId, store.Description, store.Image,
-                    store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.Location], (err, res) => {
+                    store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.StatusId, store.Location], (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
@@ -183,6 +183,23 @@ module.exports = {
                         return;
                     }
                     resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    changeStoreStatus: function (locationId, statusId) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('UPDATE STORES.stores SET StatusId = ? WHERE Location = ?', [statusId, locationId], (err, res) => {
+                    if (err) {
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
                 });
             } catch (e) {
                 console.log(e);
