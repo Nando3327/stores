@@ -49,6 +49,9 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
         getHangerTypes ()
 
+        getAllStores (mode)
+            TODO MODE
+
         saveStore(zoneId, statusId, name, lat, lon, description,
                 image, businessTypeId, hangerTypeId, ruc, address, mode, user)
             zoneId: Id from table zones
