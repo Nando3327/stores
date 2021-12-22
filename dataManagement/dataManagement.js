@@ -167,7 +167,8 @@ module.exports = {
                     'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, ' +
                     'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
                     'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
-                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, sh.Id as historicalId, sh.SellValue as sellValue ' +
+                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
+                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle ' +
                     'FROM STORES.stores s ' +
                     'INNER JOIN STORES.storehistorical sh on s.Location = sh.LocationId ' +
                     'INNER JOIN STORES.address a on s.Location = a.LocationId ' +
@@ -175,6 +176,7 @@ module.exports = {
                     'INNER JOIN STORES.businesstypes b on s.BusinessTypeId = b.Id ' +
                     'INNER JOIN STORES.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN STORES.zones z on s.ZoneId = z.Id ' +
+                    'INNER JOIN STORES.status sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" ' +
                     'ORDER BY sh.Date desc';
                 connection.query(query, [], (err, rows) => {

@@ -101,7 +101,7 @@ app.post('/saveStore', function (req, res) {
 });
 
 app.post('/getAllStores', function (req, res) {
-    lm.getAllStores().then(data => {
+    lm.getAllStores(req.body.mode).then(data => {
         respuesta.code = data.code;
         respuesta.data = data.data;
         respuesta.message = data.message;
