@@ -59,6 +59,21 @@ let overrideAddresses = function (locationId, addressStores) {
     });
 };
 
+let getStoreData = function (stores) {
+    const storesData = [];
+    const storesAdded = [];
+    stores.forEach((store) => {
+        if(storesAdded.indexOf(store.location) === -1) {
+            const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle)
+            responseObject.setAddresses(getAddressesStore(store.location, stores));
+            responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalSizeData));
+            storesData.push(responseObject);
+            storesAdded.push(store.location);
+        }
+    })
+    return storesData;
+};
+
 let getAddressesStore = function (locationId, stores) {
     const storeData = stores.filter((store) => store.location === locationId) || [];
     const addressStoreAdded = [];
@@ -193,18 +208,7 @@ module.exports = {
                 }
             };
             if(stores) {
-                const storesData = [];
-                const storesAdded = [];
-                stores.forEach((store) => {
-                    if(storesAdded.indexOf(store.location) === -1) {
-                        const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle)
-                        responseObject.setAddresses(getAddressesStore(store.location, stores));
-                        responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalSizeData));
-                        storesData.push(responseObject);
-                        storesAdded.push(store.location);
-                    }
-                })
-                response.data.stores = storesData;
+                response.data.stores = getStoreData(stores);
             }else{
                 response.message = 'NO EXISTEN TIENDAS REGISTRADAS';
             }
