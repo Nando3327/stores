@@ -1,0 +1,6 @@
+{
+  "host": "deliverdb1.c7rbgwh8s76s.us-west-2.rds.amazonaws.com",
+  "port": "3306",
+  "name": "admin",
+  "password": "efestor2411"
+}
