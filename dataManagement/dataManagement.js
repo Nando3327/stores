@@ -18,7 +18,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT Z.Id as id, Z.Name as name ' +
-                    'FROM STORES.zones Z ';
+                    'FROM Stores.zones Z ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -180,7 +180,7 @@ module.exports = {
                     'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
                     'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle ' +
-                    'FROM STORES.stores s ' +
+                    'FROM Stores.stores s ' +
                     'INNER JOIN Stores.storehistorical sh on s.Location = sh.LocationId ' +
                     'INNER JOIN Stores.address a on s.Location = a.LocationId ' +
                     'INNER JOIN Stores.status st on s.StatusId = st.Id ' +
