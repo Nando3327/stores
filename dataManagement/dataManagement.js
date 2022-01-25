@@ -36,7 +36,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT BT.Id as id, BT.Type as value ' +
-                    'FROM STORES.businesstypes BT ';
+                    'FROM Stores.businesstypes BT ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         reject('SQL ERROR');
@@ -55,7 +55,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT HT.Id as id, HT.Type as value ' +
-                    'FROM STORES.hangertypes HT ';
+                    'FROM Stores.hangertypes HT ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         reject('SQL ERROR');
@@ -73,7 +73,7 @@ module.exports = {
     saveNewStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
-                connection.query('INSERT STORES.stores SET ?', store, (err, res) => {
+                connection.query('INSERT Stores.stores SET ?', store, (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
@@ -90,7 +90,7 @@ module.exports = {
     updateStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'UPDATE STORES.stores ' +
+                const query = 'UPDATE Stores.stores ' +
                     'SET Lat = ?, Lon = ?, Name = ?, ' +
                     'ZoneId = ?, Description = ?, Image = ?, ' +
                     'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ?, StatusId = ? ' +
@@ -114,7 +114,7 @@ module.exports = {
     addStoreHistorical: function (storeHistorical) {
         return new Promise((resolve, reject) => {
             try {
-                connection.query('INSERT STORES.storehistorical SET ?', storeHistorical, (err, res) => {
+                connection.query('INSERT Stores.storehistorical SET ?', storeHistorical, (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
@@ -131,7 +131,7 @@ module.exports = {
     addAddress: function (addressStores) {
         return new Promise((resolve, reject) => {
             try {
-                connection.query('INSERT STORES.address (Categorie, Value, LocationId, Type) VALUES ?', [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
+                connection.query('INSERT Stores.address (Categorie, Value, LocationId, Type) VALUES ?', [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
@@ -148,7 +148,7 @@ module.exports = {
     deleteAddressByLocationId: function (locationId) {
         return new Promise((resolve, reject) => {
             try {
-                connection.query('DELETE FROM STORES.address WHERE LocationId = ?', [locationId], (err, res) => {
+                connection.query('DELETE FROM Stores.address WHERE LocationId = ?', [locationId], (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
@@ -172,13 +172,13 @@ module.exports = {
                     'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle ' +
                     'FROM STORES.stores s ' +
-                    'INNER JOIN STORES.storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN STORES.address a on s.Location = a.LocationId ' +
-                    'INNER JOIN STORES.status st on s.StatusId = st.Id ' +
-                    'INNER JOIN STORES.businesstypes b on s.BusinessTypeId = b.Id ' +
-                    'INNER JOIN STORES.hangertypes h on s.HangerTypeId = h.Id ' +
-                    'INNER JOIN STORES.zones z on s.ZoneId = z.Id ' +
-                    'INNER JOIN STORES.status sth on sth.Id = sh.StatusId ' +
+                    'INNER JOIN Stores.storehistorical sh on s.Location = sh.LocationId ' +
+                    'INNER JOIN Stores.address a on s.Location = a.LocationId ' +
+                    'INNER JOIN Stores.status st on s.StatusId = st.Id ' +
+                    'INNER JOIN Stores.businesstypes b on s.BusinessTypeId = b.Id ' +
+                    'INNER JOIN Stores.hangertypes h on s.HangerTypeId = h.Id ' +
+                    'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
+                    'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" ' +
                     'ORDER BY sh.Date desc';
                 connection.query(query, [], (err, rows) => {
@@ -198,7 +198,7 @@ module.exports = {
     changeStoreStatus: function (locationId, statusId) {
         return new Promise((resolve, reject) => {
             try {
-                connection.query('UPDATE STORES.stores SET StatusId = ? WHERE Location = ?', [statusId, locationId], (err, res) => {
+                connection.query('UPDATE Stores.stores SET StatusId = ? WHERE Location = ?', [statusId, locationId], (err, res) => {
                     if (err) {
                         reject('SQL ERROR');
                         return;
