@@ -10,6 +10,7 @@ connection.connect((err) => {
     if (err) throw err;
     console.log('Connected!');
 });
+const tag = 'STORES DM'
 
 module.exports = {
 
@@ -20,6 +21,7 @@ module.exports = {
                     'FROM STORES.zones Z ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -39,6 +41,7 @@ module.exports = {
                     'FROM Stores.businesstypes BT ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -58,6 +61,7 @@ module.exports = {
                     'FROM Stores.hangertypes HT ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -75,6 +79,7 @@ module.exports = {
             try {
                 connection.query('INSERT Stores.stores SET ?', store, (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -99,6 +104,7 @@ module.exports = {
                     store.ZoneId, store.Description, store.Image,
                     store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.StatusId, store.Location], (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -116,6 +122,7 @@ module.exports = {
             try {
                 connection.query('INSERT Stores.storehistorical SET ?', storeHistorical, (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -133,6 +140,7 @@ module.exports = {
             try {
                 connection.query('INSERT Stores.address (Categorie, Value, LocationId, Type) VALUES ?', [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -150,6 +158,7 @@ module.exports = {
             try {
                 connection.query('DELETE FROM Stores.address WHERE LocationId = ?', [locationId], (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -183,6 +192,7 @@ module.exports = {
                     'ORDER BY sh.Date desc';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
@@ -200,6 +210,7 @@ module.exports = {
             try {
                 connection.query('UPDATE Stores.stores SET StatusId = ? WHERE Location = ?', [statusId, locationId], (err, res) => {
                     if (err) {
+                        console.log(tag, err);
                         reject('SQL ERROR');
                         return;
                     }
