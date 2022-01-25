@@ -60,7 +60,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             lat: store latitude
             lon: store longitude
             description: store description
-            image: store image BASE64
+            image: store image string URL on server
             businessTypeId: Id from table businessType
             hangerTypeId: Id from table HangerType
             ruc: Store ruc
