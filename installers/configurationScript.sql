@@ -51,11 +51,12 @@ use Stores;
 
    create table status
    (
-       Id            int auto_increment,
-       Status        varchar(300)  null,
-       Marker        varchar(300)   null,
-       ClassStyle    varchar(30)   null,
-       ShowDateField int default 0 null,
+       Id             int auto_increment,
+       Status         varchar(300)  null,
+       Marker         varchar(300)  null,
+       ClassStyle     varchar(30)   null,
+       ShowDateField  int default 0 null,
+       ShowHistorical int default 1 null,
        constraint Status_StatusId_uindex
            unique (Id)
    );
