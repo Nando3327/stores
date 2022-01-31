@@ -99,7 +99,7 @@ let getHistoricalStore = function (locationId, stores) {
     const historicalStoreAdded = [];
     const historical = [];
     storeData.forEach((store) => {
-        if(historicalStoreAdded.indexOf(store.historicalId) === -1) {
+        if(historicalStoreAdded.indexOf(store.historicalId) === -1 && store.showHistorical) {
             let date = '';
             try {
                 date = new Date(store.date).toISOString().split('T')[0];
@@ -107,7 +107,7 @@ let getHistoricalStore = function (locationId, stores) {
                 date = store.date;
                 console.log('ERROR AL TRANSFORMAR FECHA', store.date);
             }
-            const historicalData = new StoreHistoricalResponseModel(locationId, store.statusHistorical, date, store.sellValue, store.historicalClassStyle, store.showDateField, store.showHistorical);
+            const historicalData = new StoreHistoricalResponseModel(locationId, store.statusHistorical, date, store.sellValue, store.historicalClassStyle, store.showDateField);
             historical.push(historicalData);
             historicalStoreAdded.push(store.historicalId);
         }

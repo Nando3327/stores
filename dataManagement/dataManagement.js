@@ -175,11 +175,11 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
-                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowHistorical as showHistorical, st.ShowDateField as showDateField, ' +
+                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, ' +
                     'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
                     'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
                     'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
-                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle ' +
+                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
                     'FROM Stores.stores s ' +
                     'INNER JOIN Stores.storehistorical sh on s.Location = sh.LocationId ' +
                     'INNER JOIN Stores.address a on s.Location = a.LocationId ' +
