@@ -1,6 +1,6 @@
 {
-  "host": "deliverdb1.c7rbgwh8s76s.us-west-2.rds.amazonaws.com",
+  "host": "localhost",
   "port": "3306",
-  "name": "admin",
+  "name": "sa",
   "password": "efestor2411"
 }
