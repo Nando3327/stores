@@ -107,7 +107,7 @@ let getHistoricalStore = function (locationId, stores) {
                 date = store.date;
                 console.log('ERROR AL TRANSFORMAR FECHA', store.date);
             }
-            const historicalData = new StoreHistoricalResponseModel(locationId, store.statusHistorical, date, store.sellValue, store.historicalClassStyle);
+            const historicalData = new StoreHistoricalResponseModel(locationId, store.statusHistorical, date, store.sellValue, store.historicalClassStyle, store.showDateField, store.showHistorical);
             historical.push(historicalData);
             historicalStoreAdded.push(store.historicalId);
         }
