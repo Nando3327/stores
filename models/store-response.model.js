@@ -1,5 +1,5 @@
 module.exports = class StoreResponse {
-    constructor(location, zoneId, statusId, name, lat, lon, description, image, businessTypeId, hangerTypeId, ruc, status, businessType, hangerType, marker, classStyle) {
+    constructor(location, zoneId, statusId, name, lat, lon, description, image, businessTypeId, hangerTypeId, ruc, status, businessType, hangerType, marker, classStyle, showDate, historicalDate) {
         this.location = location;
         this.zoneId = zoneId;
         this.statusId = statusId;
@@ -16,6 +16,8 @@ module.exports = class StoreResponse {
         this.hangerTypeId = hangerTypeId;
         this.hangerType = hangerType;
         this.ruc = ruc;
+        this.showDate = showDate;
+        this.historicalDate = historicalDate;
     }
 
     setAddresses(addresses) {

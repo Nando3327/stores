@@ -70,7 +70,7 @@ let getStoreData = function (stores) {
     const storesAdded = [];
     stores.forEach((store) => {
         if(storesAdded.indexOf(store.location) === -1) {
-            const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle)
+            const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle, store.showDate, store.historicalDate)
             responseObject.setAddresses(getAddressesStore(store.location, stores));
             responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalSizeData));
             storesData.push(responseObject);
