@@ -133,6 +133,18 @@ app.post('/changeStoreStatus', function (req, res) {
     }
 });
 
+app.post('/getStatus', function (req, res) {
+    lm.getStatus().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
+
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');
 });

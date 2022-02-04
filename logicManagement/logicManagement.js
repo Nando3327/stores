@@ -207,6 +207,27 @@ module.exports = {
         });
     },
 
+    getStatus: function () {
+        return dm.getStatus().then(data => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    status: []
+                }
+            };
+            if(data) {
+                response.data.status = data;
+            }else{
+                response.message = 'NO EXISTEN STATUS REGISTRADOS';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
     getAllStores: function (mode) {
         return dm.getAllStores().then(stores => {
             const response = {

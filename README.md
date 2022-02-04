@@ -77,3 +77,5 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             user: UserKey of table SECURITY.users
             sellValue: value of a receipt done
             date: date to do a return in a receive action
+
+        getStatus ()

@@ -74,6 +74,26 @@ module.exports = {
         });
     },
 
+    getStatus: function () {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT S.Id as id, S.Status as value ' +
+                    'FROM Stores.status S ';
+                connection.query(query, [], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     saveNewStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
