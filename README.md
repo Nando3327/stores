@@ -79,3 +79,10 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             date: date to do a return in a receive action
 
         getStatus ()
+        
+        resetStatus(oldStatus, newStatus, user, date, sellValue)
+            oldStatus: Status to change
+            newStatus: New status for stores
+            user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
+            date: date Event
+            sellValue: value of a receipt done

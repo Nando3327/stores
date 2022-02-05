@@ -257,5 +257,28 @@ module.exports = {
                 resolve(e);
             }
         });
-    }
+    },
+
+    getStoresByStatus: function (statusId) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT s.Location as location, s.Lat as lat, s.Lon as lon, ' +
+                    's.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc ' +
+                    'FROM Stores.stores s ' +
+                    'WHERE s.StatusId = ? ';
+                connection.query(query, [statusId], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : []);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
 };

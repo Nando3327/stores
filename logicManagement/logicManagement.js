@@ -144,7 +144,7 @@ let saveHistoricalAddress = function (storeHistorical, addressStores, response, 
     });
 }
 
-let changeStatus = function (response, locationId, statusId, userKey, sellValue, dateToShow) {
+let addHistorical = function (response, locationId, statusId, userKey, sellValue, dateToShow) {
     response.data.message = 'ESTADO ACTUALIZADO';
     const date = getCurrentDateTimeMysql();
     const storeHistorical = new StoreHistoricalModel(locationId, statusId, date, userKey, sellValue, dateToShow, 'ESTATUS ACTUALIZADO');
@@ -341,21 +341,57 @@ module.exports = {
                             "action": 'Orden cancelada por no venta'
                         })
                             .then(function (_) {
-                                return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
                             })
                             .catch(function (_) {
                                 response.message = 'NO SE PUDO ELIMINAR ORDEN ATADA A TIENDA';
-                                return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
                             });
                     })
                 } else {
-                    return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                    return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
                 }
             }else{
                 response.code = 6003;
                 response.message = 'ERROR AL ACTUALIZAR ESTADO';
             }
             return response;
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
+    resetStoresStatus: function (oldStatus, newStatus, userKey, dateToShow, sellValue) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {}
+        };
+        return dm.getStoresByStatus(oldStatus).then(data => {
+            if(data && data.length) {
+                return new Promise((resolve) => {
+                    let counterStore = 0;
+                    data.forEach((store) => {
+                        dm.changeStoreStatus(store.location, newStatus).then(dataStatusChange => {
+                            counterStore++
+                            if(dataStatusChange) {
+                                addHistorical(response, store.location, newStatus, userKey, sellValue, dateToShow).then();
+                            }
+                            if(counterStore >= data.length){
+                                response.data.message = 'ESTADOS ACTUALIZADOS';
+                                resolve(response);
+                            }
+                        }).catch(e => {
+                              console.log(e);
+                              throw e
+                        });
+                    });
+                })
+            }else{
+                response.message = 'NO EXISTEN TIENDAS CON ESTADO SELECCIONADO';
+                return response;
+            }
         }).catch(e => {
             console.log(e);
             throw e
