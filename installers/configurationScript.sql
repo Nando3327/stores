@@ -135,7 +135,7 @@ use Stores;
         Date        datetime      null,
         UserKey     varchar(20)   null,
         SellValue   float         null,
-        DateToShow  date          null,
+        DateToShow  datetime      null,
         Description varchar(1000) null,
         constraint storehistorical_Id_uindex
             unique (Id),
