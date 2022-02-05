@@ -191,6 +191,22 @@ module.exports = {
         });
     },
 
+    getAuthorizer: function (source, method) {
+        return new Promise((resolve, reject) => {
+            const query = 'SELECT mt.value as method, au.value as authorized ' +
+                'FROM switch.authorizers au INNER JOIN switch.methods mt ON au.source = mt.source ' +
+                'WHERE mt.methodName = ? and au.source = ?; ';
+            connection.query(query, [method, source], (err, rows) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve((rows && rows.length > 0) ? rows[0] : undefined);
+            });
+        });
+    },
+
     getAllStores: function () {
         return new Promise((resolve, reject) => {
             try {

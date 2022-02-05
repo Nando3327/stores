@@ -1,10 +1,13 @@
 let dm = require('../dataManagement/dataManagement');
+const statusConfig = require('../configs/status.json');
 const StoreHistoricalModel = require('../models/storeHistorical.model');
 const StoreHistoricalResponseModel = require('../models/storeHistorical-response.model');
 const AddressModel = require('../models/address.model');
 const AddressResponseModel = require('../models/address-response.model');
 const StoreResponseModel = require('../models/store-response.model');
-const historicalSizeData = 7;
+const axios = require('axios').default;
+const historicalConfig = require('../configs/historical.json');
+const orderStatus = require('../configs/orderStatus.json');
 
 let getCurrentDateTimeMysql = function () {
     const currentDate = new Date();
@@ -72,7 +75,7 @@ let getStoreData = function (stores) {
         if(storesAdded.indexOf(store.location) === -1) {
             const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle, store.showDate, store.historicalDate)
             responseObject.setAddresses(getAddressesStore(store.location, stores));
-            responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalSizeData));
+            responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalConfig.historicalSizeData));
             storesData.push(responseObject);
             storesAdded.push(store.location);
         }
@@ -138,6 +141,24 @@ let saveHistoricalAddress = function (storeHistorical, addressStores, response, 
         response.code = 6002;
         response.message = 'ERROR AL GUARDAR HISTORICOS CATCH';
         return response;
+    });
+}
+
+let changeStatus = function (response, locationId, statusId, userKey, sellValue, dateToShow) {
+    response.data.message = 'ESTADO ACTUALIZADO';
+    const date = getCurrentDateTimeMysql();
+    const storeHistorical = new StoreHistoricalModel(locationId, statusId, date, userKey, sellValue, dateToShow, 'ESTATUS ACTUALIZADO');
+    return addStoreHistorical(storeHistorical).then(data => {
+        if(!data) {
+            response.code = 6003;
+            response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO';
+        }
+        return response
+    }).catch(e => {
+        console.log(e);
+        response.code = 6003;
+        response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO CATCH';
+        return response
     });
 }
 
@@ -306,21 +327,30 @@ module.exports = {
                 data: {}
             };
             if(data) {
-                response.data.message = 'ESTADO ACTUALIZADO';
-                const date = getCurrentDateTimeMysql();
-                const storeHistorical = new StoreHistoricalModel(locationId, statusId, date, userKey, sellValue, dateToShow, 'ESTATUS ACTUALIZADO');
-                return addStoreHistorical(storeHistorical).then(data => {
-                    if(!data) {
-                        response.code = 6003;
-                        response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO';
-                    }
-                    return response
-                }).catch(e => {
-                    console.log(e);
-                    response.code = 6003;
-                    response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO CATCH';
-                    return response
-                });
+                if(statusId === statusConfig.noSell) {
+                    return dm.getAuthorizer('ORDERS', 'UPDATEITEMORDER').then(dataAuthorizer => {
+                        if (!dataAuthorizer) {
+                            response.code = 6001;
+                            response.message = 'NO EXISTE INFORMACION EN AUTORIZADOR ACTUALIZAR ORDENES';
+                        }
+                        return axios.post(dataAuthorizer.authorized + dataAuthorizer.method, {
+                            "store": locationId,
+                            "oldOrderStatus": orderStatus.visible,
+                            "newOrderStatus": orderStatus.noSell,
+                            "user": userKey,
+                            "action": 'Orden cancelada por no venta'
+                        })
+                            .then(function (_) {
+                                return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                            })
+                            .catch(function (_) {
+                                response.message = 'NO SE PUDO ELIMINAR ORDEN ATADA A TIENDA';
+                                return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                            });
+                    })
+                } else {
+                    return changeStatus(response, locationId, statusId, userKey, sellValue, dateToShow);
+                }
             }else{
                 response.code = 6003;
                 response.message = 'ERROR AL ACTUALIZAR ESTADO';
