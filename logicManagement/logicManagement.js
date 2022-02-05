@@ -98,11 +98,11 @@ let getAddressesStore = function (locationId, stores) {
 };
 
 let getHistoricalStore = function (locationId, stores) {
-    const storeData = stores.filter((store) => store.location === locationId) || [];
+    const storeData = stores.filter((store) => store.location === locationId && store.showHistorical) || [];
     const historicalStoreAdded = [];
     const historical = [];
     storeData.forEach((store) => {
-        if(historicalStoreAdded.indexOf(store.historicalId) === -1 && store.showHistorical) {
+        if(historicalStoreAdded.indexOf(store.historicalId) === -1) {
             let date = '';
             try {
                 date = new Date(store.date).toISOString().split('T')[0];
