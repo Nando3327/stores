@@ -103,7 +103,7 @@ let getHistoricalStore = function (locationId, stores) {
     const historical = [];
     storeData.forEach((store) => {
         if(historicalStoreAdded.indexOf(store.historicalId) === -1) {
-            let date = '';
+            let date;
             try {
                 date = new Date(store.date).toISOString().split('T')[0];
             } catch(_) {
@@ -249,7 +249,7 @@ module.exports = {
         });
     },
 
-    getAllStores: function (mode) {
+    getAllStores: function () {
         return dm.getAllStores().then(stores => {
             const response = {
                 code: 200,
