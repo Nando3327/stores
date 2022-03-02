@@ -20,7 +20,7 @@ use Stores;
     INSERT INTO Stores.businesstypes (Id, Type) VALUES (4, 'Fruteria');
     INSERT INTO Stores.businesstypes (Id, Type) VALUES (5, 'Restaurante');
     INSERT INTO Stores.businesstypes (Id, Type) VALUES (6, 'Otro');
-
+    INSERT INTO Stores.businesstypes (Id, Type) VALUES (7, 'Licorería');
 
     create table hangertypes
     (
