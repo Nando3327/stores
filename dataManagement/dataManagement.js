@@ -38,7 +38,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT BT.Id as id, BT.Type as value ' +
-                    'FROM Stores.businesstypes BT ';
+                    'FROM Stores.businesstypes BT' +
+                    'WHERE Visible = 1 ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -51,6 +52,54 @@ module.exports = {
                 console.log(e);
                 resolve(e);
             }
+        });
+    },
+
+    updateBusinessType: function (id, type) {
+        return new Promise((resolve, reject) => {
+            const query = 'UPDATE Stores.businesstypes ' +
+                'SET Type = ? ' +
+                'WHERE Id = ? ';
+            connection.query(query, [type, id], (err, res) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    },
+
+    visibleBusinessType: function (id, status) {
+        return new Promise((resolve, reject) => {
+            const query = 'UPDATE Stores.businesstypes ' +
+                'SET Visible = ? ' +
+                'WHERE Id = ? ';
+            connection.query(query, [status, id], (err, res) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    },
+
+    addBusinessType: function (type) {
+        return new Promise((resolve, reject) => {
+            const businessType = {Type: type}
+            connection.query('INSERT Stores.businesstypes ' +
+                ' SET ?', businessType,
+                (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
         });
     },
 

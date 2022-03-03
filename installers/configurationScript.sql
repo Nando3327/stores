@@ -3,8 +3,9 @@ use Stores;
 
     create table businesstypes
     (
-        Id   int auto_increment,
-        Type varchar(30) null,
+        Id      int auto_increment,
+        Type    varchar(30)   null,
+        Visible int default 1 null,
         constraint businessTypes_Id_uindex
             unique (Id)
     );

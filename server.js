@@ -166,6 +166,69 @@ app.post('/resetStatus', function (req, res) {
     }
 });
 
+app.post('/updateBusinessType', function (req, res) {
+    if(!req.body.id || !req.body.type) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.updateBusinessType(req.body.id, req.body.type).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/addBusinessType', function (req, res) {
+    if(!req.body.type) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.addBusinessType(req.body.type).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/deleteBusinessType', function (req, res) {
+    if(!req.body.id) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.deleteBusinessType(req.body.id).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');

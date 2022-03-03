@@ -396,5 +396,78 @@ module.exports = {
             console.log(e);
             throw e
         });
-    }
+    },
+
+    updateBusinessType: function (id, type) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.updateBusinessType(id, type).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE NEGOCIO ACTUALIZADO';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO ACTUALIZAR TIPO DE NEGOCIO ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ACTUALIZAR TIPO DE NEGOCIO ';
+            return response;
+        });
+    },
+
+    deleteBusinessType: function (id) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.visibleBusinessType(id, 0).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE NEGOCIO ELIMINADO';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO ELIMINAR TIPO DE NEGOCIO ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ELIMINAR TIPO DE NEGOCIO ';
+            return response;
+        });
+    },
+
+
+    addBusinessType: function (type) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.addBusinessType(type).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE NEGOCIO CREADO';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO CREAR TIPO DE NEGOCIO ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO CREAR TIPO DE NEGOCIO ';
+            return response;
+        });
+    },
 };

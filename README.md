@@ -47,6 +47,16 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
         getBusinessType ()
 
+        addBusinessType(type)
+            type: business type
+
+        updateBusinessType(id, type)
+            id: business id
+            type: business type
+
+        deleteBusinessType(id)
+           id: business id
+
         getHangerTypes ()
 
         getAllStores (mode)
