@@ -38,7 +38,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT BT.Id as id, BT.Type as value ' +
-                    'FROM Stores.businesstypes BT' +
+                    'FROM Stores.businesstypes BT ' +
                     'WHERE BT.Visible = 1 ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
