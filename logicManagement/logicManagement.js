@@ -470,4 +470,77 @@ module.exports = {
             return response;
         });
     },
+
+    updateHangerType: function (id, type) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.updateHangerType(id, type).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE PERCHA ACTUALIZADO';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO ACTUALIZAR TIPO DE PERCHA ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ACTUALIZAR TIPO DE PERCHA ';
+            return response;
+        });
+    },
+
+    deleteHangerType: function (id) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.visibleHangerType(id, 0).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE PERCHA ELIMINADA';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO ELIMINAR TIPO DE PERCHA ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ELIMINAR TIPO DE PERCHA ';
+            return response;
+        });
+    },
+
+
+    addHangerType: function (type) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.addHangerType(type).then(data => {
+            if(data){
+                response.data.message = 'TIPO DE PERCHA CREADO';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO CREAR TIPO DE PERCHA ';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO CREAR TIPO DE PERCHA ';
+            return response;
+        });
+    },
 };

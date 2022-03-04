@@ -59,6 +59,16 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
         getHangerTypes ()
 
+        addHangerType(type)
+            type: Hanger type
+
+        updateHangerType(id, type)
+            id: Hanger id
+            type: Hanger type
+
+        deleteHangerType(id)
+           id: Hanger id
+
         getAllStores (mode)
             TODO MODE
 

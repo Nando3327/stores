@@ -107,7 +107,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT HT.Id as id, HT.Type as value ' +
-                    'FROM Stores.hangertypes HT ';
+                    'FROM Stores.hangertypes HT ' +
+                    'WHERE HT.Visible = 1 ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -120,6 +121,54 @@ module.exports = {
                 console.log(e);
                 resolve(e);
             }
+        });
+    },
+
+    updateHangerType: function (id, type) {
+        return new Promise((resolve, reject) => {
+            const query = 'UPDATE Stores.hangertypes ' +
+                'SET Type = ? ' +
+                'WHERE Id = ? ';
+            connection.query(query, [type, id], (err, res) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    },
+
+    visibleHangerType: function (id, status) {
+        return new Promise((resolve, reject) => {
+            const query = 'UPDATE Stores.hangertypes ' +
+                'SET Visible = ? ' +
+                'WHERE Id = ? ';
+            connection.query(query, [status, id], (err, res) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    },
+
+    addHangerType: function (type) {
+        return new Promise((resolve, reject) => {
+            const businessType = {Type: type}
+            connection.query('INSERT Stores.hangertypes ' +
+                ' SET ?', businessType,
+                (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
         });
     },
 

@@ -229,6 +229,69 @@ app.post('/deleteBusinessType', function (req, res) {
     }
 });
 
+app.post('/updateHangerType', function (req, res) {
+    if(!req.body.id || !req.body.type) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.updateHangerType(req.body.id, req.body.type).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/addHangerType', function (req, res) {
+    if(!req.body.type) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.addHangerType(req.body.type).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/deleteHangerType', function (req, res) {
+    if(!req.body.id) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.deleteHangerType(req.body.id).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');
