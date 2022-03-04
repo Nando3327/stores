@@ -26,8 +26,9 @@ use Stores;
 
     create table hangertypes
     (
-        Id   int auto_increment,
-        Type varchar(30) null,
+        Id      int auto_increment,
+        Type    varchar(30)   null,
+        Visible int default 1 null,
         constraint HangerTypes_Id_uindex
             unique (Id)
     );
