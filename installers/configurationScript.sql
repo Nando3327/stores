@@ -70,13 +70,13 @@ use Stores;
    grant delete, insert, select, update on table status to sa@localhost;
 
 
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (2, 'Punto por visitar', './assets/icon/blue-pointer.svg', 'blueTag', 0, 0);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (3, 'Punto visitado sin venta', './assets/icon/red-pointer.svg', 'redTag', 0, 1);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (4, 'Pedido', './assets/icon/yellow-pointer.svg', 'yellowTag', 0, 1);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (5, 'Regreso', './assets/icon/orange-pointer.svg', 'orangeTag', 1, 0);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (6, 'Cancelado', './assets/icon/red-pointer.svg', 'redTag', 0, 1);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (7, 'Cliente nuevo sin compras', './assets/icon/white-pointer.svg', 'whiteTag', 0, 0);
-    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (8, 'No cliente', './assets/icon/black-pointer.svg', 'blackTag', 0, 0);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (2, 'Punto por visitar', './assets/icon/blue-pointer.ico', 'blueTag', 0, 0);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (3, 'Punto visitado sin venta', './assets/icon/red-pointer.ico', 'redTag', 0, 1);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (4, 'Pedido', './assets/icon/yellow-pointer.ico', 'yellowTag', 0, 1);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (5, 'Regreso', './assets/icon/orange-pointer.ico', 'orangeTag', 1, 0);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (6, 'Cancelado', './assets/icon/red-pointer.ico', 'redTag', 0, 1);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (7, 'Cliente nuevo sin compras', './assets/icon/white-pointer.ico', 'whiteTag', 0, 0);
+    INSERT INTO Stores.status (Id, Status, Marker, ClassStyle, ShowDateField, ShowHistorical) VALUES (8, 'No cliente', './assets/icon/black-pointer.ico', 'blackTag', 0, 0);
 
     create table stores
     (
