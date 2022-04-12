@@ -110,15 +110,24 @@ app.post('/saveStore', function (req, res) {
 });
 
 app.post('/getAllStores', function (req, res) {
-    lm.getAllStores().then(data => {
-        respuesta.code = data.code;
-        respuesta.data = data.data;
-        respuesta.message = data.message;
+    if(!req.body.user){
+        respuesta = {
+            error: true,
+            code: 6000,
+            message: 'Datos incompletos'
+        };
         res.send(respuesta);
-    }).catch(err => {
-        errorResponse.message = err.message;
-        res.send(errorResponse);
-    });
+    } else {
+        lm.getAllStores(req.body.user).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
 });
 
 app.post('/changeStoreStatus', function (req, res) {

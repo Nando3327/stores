@@ -249,8 +249,8 @@ module.exports = {
         });
     },
 
-    getAllStores: function () {
-        return dm.getAllStores().then(stores => {
+    getAllStores: function (user) {
+        return dm.getAllStores(user).then(stores => {
             const response = {
                 code: 200,
                 message: 'OK',
