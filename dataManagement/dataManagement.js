@@ -14,12 +14,14 @@ const tag = 'STORES DM'
 
 module.exports = {
 
-    getZones: function () {
+    getZones: function (user) {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT Z.Id as id, Z.Name as name ' +
-                    'FROM Stores.zones Z ';
-                connection.query(query, [], (err, rows) => {
+                    'FROM Stores.zones Z ' +
+                    'INNER JOIN Stores.userzones UZ ON Z.Id = UZ.Zone ' +
+                    'WHERE UZ.UserKey = ?';
+                connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
                         reject('SQL ERROR');

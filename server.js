@@ -34,15 +34,24 @@ let errorResponse = {
 };
 
 app.post('/getZones', function (req, res) {
-    lm.getZones().then(data => {
-        respuesta.code = data.code;
-        respuesta.data = data.data;
-        respuesta.message = data.message;
+    if(!req.body.user){
+        respuesta = {
+            error: true,
+            code: 6000,
+            message: 'Datos incompletos'
+        };
         res.send(respuesta);
-    }).catch(err => {
-        errorResponse.message = err.message;
-        res.send(errorResponse);
-    });
+    } else {
+        lm.getZones(req.body.user).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
 });
 
 app.post('/getBusinessTypes', function (req, res) {

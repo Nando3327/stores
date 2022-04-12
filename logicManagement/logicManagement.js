@@ -165,8 +165,8 @@ let addHistorical = function (response, locationId, statusId, userKey, sellValue
 
 module.exports = {
 
-    getZones: function () {
-        return dm.getZones().then(data => {
+    getZones: function (user) {
+        return dm.getZones(user).then(data => {
             const response = {
                 code: 200,
                 message: 'OK',
