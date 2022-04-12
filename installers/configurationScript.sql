@@ -156,4 +156,20 @@ use Stores;
     grant delete, insert, select, update on table storehistorical to sa@localhost;
 
 
+    create table userzones
+    (
+        Id      int auto_increment,
+        Zone    int         null,
+        UserKey varchar(20) null,
+        constraint userZones_Id_uindex
+            unique (Id),
+        constraint userzones_users_UserKey_fk
+            foreign key (UserKey) references security.users (UserKey),
+        constraint userzones_zones_Id_fk
+            foreign key (Zone) references zones (Id)
+    );
 
+    alter table userzones
+        add primary key (Id);
+
+    grant delete, insert, select, update on table userzones to sa@localhost;
