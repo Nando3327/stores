@@ -323,7 +323,7 @@ module.exports = {
                     'INNER JOIN Stores.businesstypes b on s.BusinessTypeId = b.Id ' +
                     'INNER JOIN Stores.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
-                    'INNER JOIN Stores.userzones UZ ON Z.Id = UZ.Zone ' +
+                    'INNER JOIN Stores.userzones UZ ON z.Id = UZ.Zone ' +
                     'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ?' +
                     'ORDER BY sh.Date desc';
