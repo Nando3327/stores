@@ -42,8 +42,8 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 -API
 
     -POST
-        getZones (user?)
-            user: userkey from user table(OPTIONAL not used now)
+        getZones (user)
+            user: userkey from user table
 
         getBusinessType ()
 
@@ -69,8 +69,8 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         deleteHangerType(id)
            id: Hanger id
 
-        getAllStores (mode)
-            TODO MODE
+        getAllStores (user)
+            user: userkey from user table
 
         saveStore(zoneId, statusId, name, lat, lon, description,
                 image, businessTypeId, hangerTypeId, ruc, address, mode, user)
