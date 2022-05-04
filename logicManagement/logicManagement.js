@@ -8,6 +8,7 @@ const StoreResponseModel = require('../models/store-response.model');
 const axios = require('axios').default;
 const historicalConfig = require('../configs/historical.json');
 const orderStatus = require('../configs/orderStatus.json');
+const images = require('../configs/images.json');
 
 let getCurrentDateTimeMysql = function () {
     const currentDate = new Date();
@@ -73,7 +74,8 @@ let getStoreData = function (stores) {
     const storesAdded = [];
     stores.forEach((store) => {
         if(storesAdded.indexOf(store.location) === -1) {
-            const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, store.image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle, store.showDate, store.historicalDate)
+            const image = (images.returnImages) ? store.image: '';
+            const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle, store.showDate, store.historicalDate)
             responseObject.setAddresses(getAddressesStore(store.location, stores));
             responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalConfig.historicalSizeData));
             storesData.push(responseObject);
