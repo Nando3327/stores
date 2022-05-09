@@ -197,6 +197,38 @@ let getStoresForUser = function (user) {
     });
 }
 
+let getStoresByRol = function (user, roll, allStores) {
+    return new Promise((resolve, reject) => {
+        switch (roll) {
+            case roles.admin:
+                allStores.forEach((st) => {
+                    st.setCanOpenCard(true);
+                })
+                resolve(allStores);
+                break;
+            case roles.seller:
+                return getStoresForUser(user).then((storesUser) => {
+                    allStores.forEach((st) => {
+                        if(storesUser.indexOf(st.location) > -1) {
+                            st.setCanOpenCard(true);
+                        }
+                    })
+                    resolve(allStores);
+                })
+                break;
+            case roles.driver:
+                allStores = allStores.filter((st) => {
+                    st.setCanOpenCard(true);
+                    return st.statusId === orderStatus.return
+                });
+                resolve(allStores);
+                break;
+            default:
+                resolve(allStores);
+        }
+    });
+}
+
 
 module.exports = {
 
@@ -297,32 +329,10 @@ module.exports = {
                 const allStores =  getStoreData(stores);
                 return getUserRol(user).then((userInfo) => {
                     if(userInfo) {
-                        if(userInfo.roll === roles.admin) {
-                            allStores.forEach((st) => {
-                                st.setCanOpenCard(true);
-                            })
-                            response.data.stores = allStores;
+                        return getStoresByRol(user, userInfo.roll, allStores).then((stores) => {
+                            response.data.stores = stores;
                             return response;
-                        } else if(userInfo.roll === roles.seller) {
-                            return getStoresForUser(user).then((storesUser) => {
-                                allStores.forEach((st) => {
-                                    if(storesUser.indexOf(st.location) > -1) {
-                                        st.setCanOpenCard(true);
-                                    }
-                                })
-                                response.data.stores = allStores;
-                                return response;
-                            })
-                        } else if(userInfo.roll === roles.driver) {
-                            response.data.stores = allStores.filter((st) => {
-                                st.setCanOpenCard(true);
-                                return st.statusId === orderStatus.return
-                            });
-                            return response;
-                        } else {
-                            response.data.stores = allStores;
-                            return response;
-                        }
+                        });
                     } else {
                         response.data.stores = allStores;
                         return response;
