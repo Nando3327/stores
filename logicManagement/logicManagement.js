@@ -9,6 +9,7 @@ const axios = require('axios').default;
 const historicalConfig = require('../configs/historical.json');
 const orderStatus = require('../configs/orderStatus.json');
 const images = require('../configs/images.json');
+const roles = require('../configs/rol.json');
 
 let getCurrentDateTimeMysql = function () {
     const currentDate = new Date();
@@ -164,6 +165,38 @@ let addHistorical = function (response, locationId, statusId, userKey, sellValue
     });
 }
 
+let getUserRol = function (user) {
+    return new Promise((resolve, reject) => {
+        dm.getUserRol(user).then(data => {
+            if(data && data.length) {
+                resolve(data[0]);
+            } else {
+                resolve(0);
+            }
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+}
+
+let getStoresForUser = function (user) {
+    return new Promise((resolve, reject) => {
+        dm.getStoresByUser(user).then(data => {
+            const response = [];
+            if(data && data.length) {
+                data.forEach((storeId => {
+                    response.push(storeId.id);
+                }))
+            }
+            resolve(response);
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+}
+
 
 module.exports = {
 
@@ -261,11 +294,44 @@ module.exports = {
                 }
             };
             if(stores) {
-                response.data.stores = getStoreData(stores);
-            }else{
+                const allStores =  getStoreData(stores);
+                return getUserRol(user).then((userInfo) => {
+                    if(userInfo) {
+                        if(userInfo.roll === roles.admin) {
+                            allStores.forEach((st) => {
+                                st.setCanOpenCard(true);
+                            })
+                            response.data.stores = allStores;
+                            return response;
+                        } else if(userInfo.roll === roles.seller) {
+                            return getStoresForUser(user).then((storesUser) => {
+                                allStores.forEach((st) => {
+                                    if(storesUser.indexOf(st.location) > -1) {
+                                        st.setCanOpenCard(true);
+                                    }
+                                })
+                                response.data.stores = allStores;
+                                return response;
+                            })
+                        } else if(userInfo.roll === roles.driver) {
+                            response.data.stores = allStores.filter((st) => {
+                                st.setCanOpenCard(true);
+                                return st.statusId === orderStatus.return
+                            });
+                            return response;
+                        } else {
+                            response.data.stores = allStores;
+                            return response;
+                        }
+                    } else {
+                        response.data.stores = allStores;
+                        return response;
+                    }
+                })
+            } else{
                 response.message = 'NO EXISTEN TIENDAS REGISTRADAS';
+                return response;
             }
-            return response;
         }).catch(e => {
             console.log(e);
             throw e

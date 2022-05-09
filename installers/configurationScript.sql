@@ -173,3 +173,21 @@ use Stores;
         add primary key (Id);
 
     grant delete, insert, select, update on table userzones to sa@localhost;
+
+    create table userstore
+    (
+        Id      int auto_increment,
+        UserKey varchar(30) null,
+        Store   int         null,
+        constraint userstore_Id_uindex
+            unique (Id),
+        constraint userstore_stores_Location_fk
+            foreign key (Store) references stores (Location),
+        constraint userstore_users_UserKey_fk
+            foreign key (UserKey) references security.users (UserKey)
+    );
+
+    alter table userstore
+        add primary key (Id);
+
+    grant delete, insert, select, update on table userzones to sa@localhost;

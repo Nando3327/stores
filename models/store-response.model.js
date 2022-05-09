@@ -18,6 +18,7 @@ module.exports = class StoreResponse {
         this.ruc = ruc;
         this.showDate = showDate;
         this.historicalDate = historicalDate;
+        this.canOpenCard = false;
     }
 
     setAddresses(addresses) {
@@ -26,5 +27,9 @@ module.exports = class StoreResponse {
 
     setHistorical(historical) {
         this.historical = historical;
+    }
+
+    setCanOpenCard(value) {
+        this.canOpenCard = value;
     }
 };

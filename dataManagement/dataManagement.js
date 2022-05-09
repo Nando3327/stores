@@ -325,7 +325,7 @@ module.exports = {
                     'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN Stores.userzones UZ ON z.Id = UZ.Zone ' +
                     'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
-                    'WHERE a.Categorie = "PR" and UZ.UserKey = ?' +
+                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
                     'ORDER BY sh.Date desc';
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
@@ -381,5 +381,47 @@ module.exports = {
             }
         });
     },
+
+    getStoresByUser: function (user) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT S.Store as id ' +
+                    'FROM Stores.userstore S ' +
+                    'WHERE S.UserKey = ? ';
+                connection.query(query, [user], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : []);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    getUserRol: function (user) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT U.Roll as roll ' +
+                    'FROM security.users U ' +
+                    'WHERE U.UserKey = ? ';
+                connection.query(query, [user], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : []);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    }
 
 };
