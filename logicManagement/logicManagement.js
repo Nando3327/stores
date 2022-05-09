@@ -198,7 +198,7 @@ let getStoresForUser = function (user) {
 }
 
 let getStoresByRol = function (user, roll, allStores) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         switch (roll) {
             case roles.admin:
                 allStores.forEach((st) => {
@@ -215,7 +215,6 @@ let getStoresByRol = function (user, roll, allStores) {
                     })
                     resolve(allStores);
                 })
-                break;
             case roles.driver:
                 allStores = allStores.filter((st) => {
                     st.setCanOpenCard(true);
