@@ -147,6 +147,17 @@ let saveHistoricalAddress = function (storeHistorical, addressStores, response, 
     });
 }
 
+let saveStoreUser = function (storeId, userKey) {
+    return new Promise((resolve, reject) => {
+        dm.saveStoreUser(storeId, userKey).then(data => {
+            resolve(data);
+        }).catch(e => {
+            console.log(e);
+            reject(e);
+        });
+    });
+}
+
 let addHistorical = function (response, locationId, statusId, userKey, sellValue, dateToShow) {
     response.data.message = 'ESTADO ACTUALIZADO';
     const date = getCurrentDateTimeMysql();
@@ -388,6 +399,7 @@ module.exports = {
                 addressStores.forEach((add) => {
                     add.setLocationId(data.insertId);
                 });
+                saveStoreUser(data.insertId, userKey).then();
                 return saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId);
             }).catch(e => {
                 console.log(e);

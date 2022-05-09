@@ -212,6 +212,28 @@ module.exports = {
         });
     },
 
+    saveStoreUser: function (storeId, userKey) {
+        return new Promise((resolve, reject) => {
+            try {
+                const store = {
+                    UserKey: userKey,
+                    Store: storeId
+                }
+                connection.query('INSERT Stores.userstore SET ?', store, (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     updateStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
