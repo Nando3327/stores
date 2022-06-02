@@ -632,4 +632,46 @@ module.exports = {
             return response;
         });
     },
+
+    getUserZones: function (user) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                zones: []
+            }
+        };
+        return dm.getUserZones(user).then(data => {
+            if(data){
+                response.data.zones = data;
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE ENCONTRARON ZONAS POR USUARIO ';
+            return response;
+        });
+    },
+
+    getUserZonesStore: function (user, zone) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                stores: []
+            }
+        };
+        return dm.getUserZonesStore(user, zone).then(data => {
+            if(data){
+                response.data.stores = data;
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE ENCONTRARON TIENDAS POR USUARIO ';
+            return response;
+        });
+    },
 };

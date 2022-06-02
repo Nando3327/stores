@@ -310,6 +310,48 @@ app.post('/deleteHangerType', function (req, res) {
     }
 });
 
+app.post('/getUserZones', function (req, res) {
+    if(!req.body.user) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.getUserZones(req.body.user).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/getUserZonesStore', function (req, res) {
+    if(!req.body.user || !req.body.zone) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.getUserZonesStore(req.body.user, req.body.zone).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');

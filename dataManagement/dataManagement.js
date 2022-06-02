@@ -444,6 +444,50 @@ module.exports = {
                 resolve(e);
             }
         });
-    }
+    },
+
+    getUserZones: function (user) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT UZ.Id as id, UZ.Zone as zone, Z.Name as name ' +
+                    'FROM Stores.userzones UZ ' +
+                    'INNER JOIN Stores.zones Z on UZ.Zone = Z.Id ' +
+                    'WHERE UZ.UserKey = ?';
+                connection.query(query, [user], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    getUserZonesStore: function (user, zone) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT id, S.Location as location, S.Name as name ' +
+                    'FROM Stores.userstore US ' +
+                    'INNER JOIN Stores.stores S on US.Store = S.Location ' +
+                    'WHERE S.ZoneId = ? and US.UserKey = ?';
+                connection.query(query, [zone, user], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 
 };
