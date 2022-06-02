@@ -352,6 +352,39 @@ app.post('/getUserZonesStore', function (req, res) {
     }
 });
 
+app.post('/getZonesStore', function (req, res) {
+    if(!req.body.zone) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.getZonesStore(req.body.zone).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/getAllZones', function (req, res) {
+    lm.getAllZones().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
+
 
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:6002');

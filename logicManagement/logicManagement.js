@@ -670,7 +670,49 @@ module.exports = {
         }).catch(e => {
             console.log(e);
             response.code = 4003;
-            response.data.message = 'NO SE ENCONTRARON TIENDAS POR USUARIO ';
+            response.data.message = 'NO SE ENCONTRARON TIENDAS POR ZONA Y USUARIO ';
+            return response;
+        });
+    },
+
+    getZonesStore: function (zone) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                stores: []
+            }
+        };
+        return dm.getZonesStore(zone).then(data => {
+            if(data){
+                response.data.stores = data;
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE ENCONTRARON TIENDAS POR ZONA ';
+            return response;
+        });
+    },
+
+    getAllZones: function () {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                zones: []
+            }
+        };
+        return dm.getAllZones().then(data => {
+            if(data){
+                response.data.zones = data;
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE ENCONTRARON ZONAS ';
             return response;
         });
     },

@@ -36,6 +36,26 @@ module.exports = {
         });
     },
 
+    getAllZones: function () {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT Z.Id as id, Z.Name as name ' +
+                    'FROM Stores.zones Z';
+                connection.query(query, [], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     getBusinessTypes: function () {
         return new Promise((resolve, reject) => {
             try {
@@ -476,6 +496,27 @@ module.exports = {
                     'INNER JOIN Stores.stores S on US.Store = S.Location ' +
                     'WHERE S.ZoneId = ? and US.UserKey = ?';
                 connection.query(query, [zone, user], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    getZonesStore: function (zone) {
+        return new Promise((resolve, reject) => {
+            try {
+                const query = 'SELECT S.Location as location, S.Name as name ' +
+                    'FROM Stores.stores S ' +
+                    'WHERE S.ZoneId = ? ';
+                connection.query(query, [zone], (err, res) => {
                     if (err) {
                         console.log(tag, err);
                         reject('SQL ERROR');
