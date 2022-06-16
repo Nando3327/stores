@@ -17,7 +17,7 @@ module.exports = {
     getZones: function (user) {
         return new Promise((resolve, reject) => {
             try {
-                const query = 'SELECT Z.Id as id, Z.Name as name ' +
+                const query = 'SELECT Z.Id as id, Z.Name as name, UZ.Id as userZoneId ' +
                     'FROM Stores.zones Z ' +
                     'INNER JOIN Stores.userzones UZ ON Z.Id = UZ.Zone ' +
                     'WHERE UZ.UserKey = ?';
@@ -458,28 +458,6 @@ module.exports = {
                         return;
                     }
                     resolve((rows && rows.length > 0) ? rows : []);
-                });
-            } catch (e) {
-                console.log(e);
-                resolve(e);
-            }
-        });
-    },
-
-    getUserZones: function (user) {
-        return new Promise((resolve, reject) => {
-            try {
-                const query = 'SELECT UZ.Id as id, UZ.Zone as zone, Z.Name as name ' +
-                    'FROM Stores.userzones UZ ' +
-                    'INNER JOIN Stores.zones Z on UZ.Zone = Z.Id ' +
-                    'WHERE UZ.UserKey = ?';
-                connection.query(query, [user], (err, res) => {
-                    if (err) {
-                        console.log(tag, err);
-                        reject('SQL ERROR');
-                        return;
-                    }
-                    resolve(res);
                 });
             } catch (e) {
                 console.log(e);

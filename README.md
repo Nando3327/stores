@@ -42,7 +42,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 -API
 
     -POST
-        getZones (user)
+        getZones (user) Zones by user
             user: userkey from user table
 
         getBusinessType ()
@@ -126,9 +126,6 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
 
         deleteHangerType(id)
             id: Hanger Id
-
-        getUserZones(user): Zones by user
-            user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
 
         getUserZonesStore(user, zone): Stores by user and zone
             user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
