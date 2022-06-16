@@ -106,3 +106,35 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
             date: date Event
             sellValue: value of a receipt done
+        
+        updateBusinessType(id, type)
+            id: Business Id
+            type: New Business type
+
+        addBusinessType(type)
+            type: New Business type
+
+        deleteBusinessType(id)
+            id: Business Id
+
+        updateHangerType(id, type)
+            id: Hanger Id
+            type: New Hanger type
+
+        addHangerType(type)
+            type: New Hanger type
+
+        deleteHangerType(id)
+            id: Hanger Id
+
+        getUserZones(user): Zones by user
+            user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
+
+        getUserZonesStore(user, zone): Stores by user and zone
+            user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
+            zone: Zone Id
+
+        getZonesStore(zone): Stores by zone
+            zone: Zone Id
+
+        getAllZones()
