@@ -695,4 +695,38 @@ module.exports = {
             return response;
         });
     },
+
+    addUserZones: function (zones, user) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: 'OK'
+            }
+        };
+        return dm.deleteUserZones(user).then(() => {
+            const userZones = [];
+            zones.forEach((zoneId) => {
+                userZones.push([zoneId, user])
+            })
+            return dm.addUserZones(userZones).then(data => {
+                if(data){
+                    response.data.message = 'ZONAS AGREGADAS ';
+                } else {
+                    response.data.message = 'NO SE PUDO AGREGAR ZONAS AL USUARIO ';
+                }
+                return response;
+            }).catch(e => {
+                console.log(e);
+                response.code = 4003;
+                response.data.message = 'NO SE PUDO AGREGAR ZONAS AL USUARIO ';
+                return response;
+            });
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ELIMIANAR ZONAS DE USUARIO ';
+            return response;
+        });
+    },
 };

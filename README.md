@@ -135,3 +135,7 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             zone: Zone Id
 
         getAllZones()
+
+        addUserZones(user, zones)
+            user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
+            zones: Zones Ids
