@@ -529,10 +529,49 @@ module.exports = {
         });
     },
 
+    addUserZonesStores: function (userZonesStores) {
+        return new Promise((resolve, reject) => {
+            try {
+                const sql  = 'INSERT Stores.userstore (Store, UserKey) VALUES ?'
+                const values = [userZonesStores]
+                connection.query(sql, values, (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     deleteUserZones: function (user) {
         return new Promise((resolve, reject) => {
             try {
                 connection.query('DELETE FROM Stores.userzones WHERE UserKey = ?', [user], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    deleteUserZonesStore: function (user, stores) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('DELETE FROM Stores.userstore ' +
+                    'WHERE UserKey = ? and Store in ?', [user, [stores]], (err, res) => {
                     if (err) {
                         console.log(tag, err);
                         reject('SQL ERROR');

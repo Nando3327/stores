@@ -50,6 +50,26 @@ let addStoreHistorical = function (storeHistorical) {
     });
 };
 
+let addUserZoneStore = function (stores, user, response) {
+    const userZonesStores = [];
+    stores.forEach((storeId) => {
+        userZonesStores.push([storeId, user])
+    })
+    return dm.addUserZonesStores(userZonesStores).then(data => {
+        if(data){
+            response.data.message = 'TIENDAS AGREGADAS POR ZONA ';
+        } else {
+            response.data.message = 'NO SE PUDO AGREGAR TIENDAS AL USUARIO POR ZONA ';
+        }
+        return response;
+    }).catch(e => {
+        console.log(e);
+        response.code = 4003;
+        response.data.message = 'NO SE PUDO AGREGAR TIENDAS AL USUARIO POR ZONA ';
+        return response;
+    });
+};
+
 let overrideAddresses = function (locationId, addressStores) {
     return new Promise((resolve, reject) => {
         dm.deleteAddressByLocationId(locationId).then(data => {
@@ -709,23 +729,70 @@ module.exports = {
             zones.forEach((zoneId) => {
                 userZones.push([zoneId, user])
             })
-            return dm.addUserZones(userZones).then(data => {
-                if(data){
-                    response.data.message = 'ZONAS AGREGADAS ';
-                } else {
+            if(userZones.length) {
+                return dm.addUserZones(userZones).then(data => {
+                    if(data){
+                        response.data.message = 'ZONAS AGREGADAS ';
+                    } else {
+                        response.data.message = 'NO SE PUDO AGREGAR ZONAS AL USUARIO ';
+                    }
+                    return response;
+                }).catch(e => {
+                    console.log(e);
+                    response.code = 4003;
                     response.data.message = 'NO SE PUDO AGREGAR ZONAS AL USUARIO ';
-                }
+                    return response;
+                });
+            } else {
+                response.data.message = 'ZONAS DE USUARIO ELIMINADAS ';
                 return response;
-            }).catch(e => {
-                console.log(e);
-                response.code = 4003;
-                response.data.message = 'NO SE PUDO AGREGAR ZONAS AL USUARIO ';
-                return response;
-            });
+            }
         }).catch(e => {
             console.log(e);
             response.code = 4003;
             response.data.message = 'NO SE PUDO ELIMIANAR ZONAS DE USUARIO ';
+            return response;
+        });
+    },
+
+    addUserZonesStore: function (zone, user, stores) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: 'OK'
+            }
+        };
+        return dm.getUserZonesStore(user, zone).then((userStoresByZone) => {
+            const storesToDelete = [];
+            userStoresByZone.forEach((store) => {
+                storesToDelete.push(store.location)
+            });
+            if(storesToDelete.length) {
+                return dm.deleteUserZonesStore(user, storesToDelete).then(() => {
+                    if(stores.length) {
+                        return addUserZoneStore(stores, user, response);
+                    } else {
+                        response.data.message = 'TIENDAS POR ZONA DE USUARIO ELIMINADAS ';
+                        return response;
+                    }
+                }).catch(e => {
+                    console.log(e);
+                    response.code = 4003;
+                    response.data.message = 'NO SE PUDO ELIMINAR TIENDAS POR ZONA DE USUARIO ';
+                    return response;
+                });
+            } else {
+                if(stores.length) {
+                    return addUserZoneStore(stores, user, response);
+                } else {
+                    return response;
+                }
+            }
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO OBTENER TIENDAS POR ZONAS DE USUARIO ';
             return response;
         });
     },
