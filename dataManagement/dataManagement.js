@@ -366,8 +366,9 @@ module.exports = {
                     'INNER JOIN Stores.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN Stores.userzones UZ ON z.Id = UZ.Zone ' +
+                    'INNER JOIN Stores.userstore US ON s.Location = US.Store ' +
                     'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
-                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
+                    'WHERE a.Categorie = "PR" and US.UserKey = ? ' +
                     'ORDER BY sh.Date desc';
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
