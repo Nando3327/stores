@@ -15,6 +15,7 @@ const tag = 'STORES DM'
 module.exports = {
 
     getZones: function (user) {
+        //TODO ADD USERADMIN BY USERZONE TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT Z.Id as id, Z.Name as name, UZ.Id as userZoneId ' +
@@ -233,6 +234,7 @@ module.exports = {
     },
 
     saveStoreUser: function (storeId, userKey) {
+        //TODO ADD USERADMIN TO USERSTORE TABLE
         return new Promise((resolve, reject) => {
             try {
                 const store = {
@@ -350,6 +352,7 @@ module.exports = {
     },
 
     getAllStores: function (user) {
+        //TODO ADD USERADMIN BY USERZONE TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
@@ -366,9 +369,8 @@ module.exports = {
                     'INNER JOIN Stores.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN Stores.userzones UZ ON z.Id = UZ.Zone ' +
-                    'INNER JOIN Stores.userstore US ON s.Location = US.Store ' +
                     'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
-                    'WHERE a.Categorie = "PR" and US.UserKey = ? ' +
+                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
                     'ORDER BY sh.Date desc';
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
@@ -426,6 +428,7 @@ module.exports = {
     },
 
     getStoresByUser: function (user) {
+        //TODO ADD USERADMIN BY USERSTORE TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT S.Store as id ' +
