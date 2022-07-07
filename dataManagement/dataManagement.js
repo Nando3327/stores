@@ -38,6 +38,7 @@ module.exports = {
     },
 
     getAllZones: function () {
+        //TODO ADD USERADMIN BY ZONES TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT Z.Id as id, Z.Name as name ' +
@@ -200,6 +201,7 @@ module.exports = {
     },
 
     getStatus: function () {
+        //TODO ADD USERADMIN BY STATUS TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT S.Id as id, S.Status as value ' +
@@ -220,6 +222,7 @@ module.exports = {
     },
 
     saveNewStore: function (store) {
+        //TODO ADD USERADMIN TO STORES TABLE
         return new Promise((resolve, reject) => {
             try {
                 connection.query('INSERT Stores.stores SET ?', store, (err, res) => {
@@ -410,6 +413,7 @@ module.exports = {
     },
 
     getStoresByStatus: function (statusId) {
+        //TODO ADD USERADMIN BY STORES TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT s.Location as location, s.Lat as lat, s.Lon as lon, ' +
@@ -475,6 +479,7 @@ module.exports = {
     },
 
     getUserZonesStore: function (user, zone) {
+        //TODO ADD USERADMIN BY USERSTORE TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT id, S.Location as location, S.Name as name ' +
@@ -497,6 +502,7 @@ module.exports = {
     },
 
     getZonesStore: function (zone) {
+        //TODO ADD USERADMIN BY STORE TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT S.Location as location, S.Name as name ' +
@@ -518,6 +524,7 @@ module.exports = {
     },
 
     addUserZones: function (userZones) {
+        //TODO ADD USERADMIN TO USERZONES TABLE
         return new Promise((resolve, reject) => {
             try {
                 const sql  = 'INSERT Stores.userzones (Zone, UserKey) VALUES ?'
@@ -538,6 +545,7 @@ module.exports = {
     },
 
     addUserZonesStores: function (userZonesStores) {
+        //TODO ADD USERADMIN TO USERSTORE TABLE
         return new Promise((resolve, reject) => {
             try {
                 const sql  = 'INSERT Stores.userstore (Store, UserKey) VALUES ?'
@@ -560,6 +568,7 @@ module.exports = {
     deleteUserZones: function (user) {
         return new Promise((resolve, reject) => {
             try {
+                //TODO ADD USERADMIN BY USERZONE TABLE IN WHERE CLAUSE
                 connection.query('DELETE FROM Stores.userzones WHERE UserKey = ?', [user], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -578,6 +587,7 @@ module.exports = {
     deleteUserZonesStore: function (user, stores) {
         return new Promise((resolve, reject) => {
             try {
+                //TODO ADD USERADMIN BY USERSTORE TABLE IN WHERE CLAUSE
                 connection.query('DELETE FROM Stores.userstore ' +
                     'WHERE UserKey = ? and Store in ?', [user, [stores]], (err, res) => {
                     if (err) {
