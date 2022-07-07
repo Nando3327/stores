@@ -58,6 +58,7 @@ module.exports = {
     },
 
     getBusinessTypes: function () {
+        //TODO ADD USERADMIN BY BUSINESSTYPES TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT BT.Id as id, BT.Type as value ' +
@@ -111,6 +112,7 @@ module.exports = {
     },
 
     addBusinessType: function (type) {
+        //TODO ADD USERADMIN TO BUSINESSTYPES TABLE
         return new Promise((resolve, reject) => {
             const businessType = {Type: type}
             connection.query('INSERT Stores.businesstypes ' +
@@ -127,6 +129,7 @@ module.exports = {
     },
 
     getHangerTypes: function () {
+        //TODO ADD USERADMIN BY HANGERTYPES TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT HT.Id as id, HT.Type as value ' +
@@ -180,6 +183,7 @@ module.exports = {
     },
 
     addHangerType: function (type) {
+        //TODO ADD USERADMIN TO HANGERTYPES TABLE
         return new Promise((resolve, reject) => {
             const businessType = {Type: type}
             connection.query('INSERT Stores.hangertypes ' +
