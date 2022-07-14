@@ -388,7 +388,8 @@ module.exports = {
             }
         };
         const date = getCurrentDateTimeMysql();
-        const storeHistorical = new StoreHistoricalModel(store.Location, store.StatusId, date, userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
+        const storeStatusId = (mode === 'edit') ? statusConfig.storeUpdated: store.StatusId;
+        const storeHistorical = new StoreHistoricalModel(store.Location, storeStatusId, date, userKey, 0, new Date().toISOString().split('T')[0], 'DATOS DE TIENDA ACTUALIZADOS');
         const addressStores = [];
         address.forEach((add) => {
             const addressStore = new AddressModel(store.Location, add.categorie, add.value, add.type);
