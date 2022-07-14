@@ -238,6 +238,7 @@ let getStoresByRol = function (user, roll, allStores) {
                 resolve(allStores);
                 break;
             case roles.seller:
+            case roles.autoSell:
                 return getStoresForUser(user).then((storesUser) => {
                     allStores.forEach((st) => {
                         if(storesUser.indexOf(st.location) > -1) {
