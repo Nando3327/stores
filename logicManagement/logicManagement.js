@@ -249,7 +249,7 @@ let getStoresByRol = function (user, roll, allStores) {
             case roles.driver:
                 allStores = allStores.filter((st) => {
                     st.setCanOpenCard(true);
-                    return st.statusId === orderStatus.return
+                    return [orderStatus.return, orderStatus.request].indexOf(st.statusId) > -1
                 });
                 resolve(allStores);
                 break;
