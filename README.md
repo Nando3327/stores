@@ -72,6 +72,9 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         getAllStores (user)
             user: userkey from user table
 
+        getStoresByZones (zones)
+            zones: ZoneId from store table
+
         saveStore(zoneId, statusId, name, lat, lon, description,
                 image, businessTypeId, hangerTypeId, ruc, address, mode, user)
             zoneId: Id from table zones

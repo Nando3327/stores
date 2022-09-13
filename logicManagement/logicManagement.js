@@ -379,6 +379,28 @@ module.exports = {
         });
     },
 
+    getStoresByZones: function (zones) {
+        return dm.getStoresByZones(zones).then(stores => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    stores: []
+                }
+            };
+            if(stores) {
+                response.data.stores = getStoreData(stores);
+                return response;
+            } else{
+                response.message = 'NO EXISTEN TIENDAS REGISTRADAS POR ZONAS';
+                return response;
+            }
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
     saveStore: function (store, mode, address, userKey) {
         const response = {
             code: 200,

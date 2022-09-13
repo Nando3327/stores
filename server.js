@@ -1,5 +1,6 @@
 const lm = require('./logicManagement/logicManagement');
 const StoreModel = require('./models/store.model');
+const ports = require('./configs/ports.json');
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
@@ -119,6 +120,27 @@ app.post('/getAllStores', function (req, res) {
         res.send(respuesta);
     } else {
         lm.getAllStores(req.body.user).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/getStoresByZones', function (req, res) {
+    if(!req.body.zones){
+        respuesta = {
+            error: true,
+            code: 6000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else {
+        lm.getStoresByZones(req.body.zones).then(data => {
             respuesta.code = data.code;
             respuesta.data = data.data;
             respuesta.message = data.message;
@@ -407,6 +429,6 @@ app.post('/addUserZonesStore', function (req, res) {
 });
 
 
-http.createServer(app).listen(6002, () => {
-    console.log('Server started at http://localhost:6002');
+http.createServer(app).listen(ports.host, () => {
+    console.log('Server started at http://localhost:' + ports.host);
 });
