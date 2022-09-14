@@ -1,6 +1,6 @@
 {
   "host": "localhost",
   "port": "3306",
-  "name": "sa",
+  "name": "root",
   "password": "efestor2411"
 }
