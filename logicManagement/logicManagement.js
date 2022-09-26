@@ -389,7 +389,7 @@ module.exports = {
                 }
             };
             if(stores) {
-                response.data.stores = getStoreData(stores);
+                response.data.stores = stores;
                 return response;
             } else{
                 response.message = 'NO EXISTEN TIENDAS REGISTRADAS POR ZONAS';
