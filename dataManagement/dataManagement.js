@@ -433,6 +433,58 @@ module.exports = {
         });
     },
 
+    getOrdersOutOfDate: function () {
+        return new Promise((resolve, reject) => {
+            try {
+                let month = new Date().getMonth() + 1;
+                if(month < 10) {
+                    month = '0' + month;
+                }
+                let day = new Date().getDate();
+                if(day < 10) {
+                    day = '0' + day;
+                }
+                const date = new Date().getFullYear() + '-' + month + '-' + day + ' ' + '23:59:59';
+                const query = 'SELECT S.Location as location, S.Name as name, O.user_register as responsable ' +
+                    'FROM orders.orders O ' +
+                    'INNER JOIN Stores.stores S ON O.store = S.Location ' +
+                    'WHERE O.visible = 1 AND O.deliver_date < ? ' +
+                    'GROUP BY S.Location ';
+                connection.query(query, [date], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    changeStoresStatus: function (locationsId, statusId) {
+        return new Promise((resolve, reject) => {
+            try {
+                connection.query('UPDATE Stores.stores ' +
+                    'SET StatusId = ? ' +
+                    'WHERE Location in (?)', [statusId, locationsId], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     getStoresByStatus: function (statusId) {
         //TODO ADD USERADMIN BY STORES TABLE IN WHERE CLAUSE
         return new Promise((resolve, reject) => {

@@ -868,4 +868,32 @@ module.exports = {
             return response;
         });
     },
+
+    manageOrdersOutOfDate: function () {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                orders: []
+            }
+        };
+        return dm.getOrdersOutOfDate().then(data => {
+            if(data && data.length){
+                response.data.orders = data;
+                const storesUotOfDate = [];
+                data.forEach((store) => {
+                    storesUotOfDate.push(store.location);
+                })
+                return dm.changeStoresStatus(storesUotOfDate, orderStatus.delayed).then(() => {
+                    return response
+                })
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO CREAR LA ZONA';
+            return response;
+        });
+    },
 };

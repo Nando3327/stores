@@ -470,6 +470,18 @@ app.post('/addZone', function (req, res) {
     }
 });
 
+app.post('/manageOrdersOutOfDate', function (req, res) {
+    lm.manageOrdersOutOfDate().then(data => {
+        respuesta.code = data.code;
+        respuesta.data = data.data;
+        respuesta.message = data.message;
+        res.send(respuesta);
+    }).catch(err => {
+        errorResponse.message = err.message;
+        res.send(errorResponse);
+    });
+});
+
 
 http.createServer(app).listen(ports.host, () => {
     console.log('Server started at http://localhost:' + ports.host);
