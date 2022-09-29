@@ -147,3 +147,10 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             user: UserKey of table SECURITY.usersUserKey of table SECURITY.users
             zones: Zone Id
             stores: Stores Ids
+
+        addZone(name)
+            name: Zone name
+
+        updateZone(id, name)
+            id: Zone id
+            name: Zone name

@@ -428,6 +428,48 @@ app.post('/addUserZonesStore', function (req, res) {
     }
 });
 
+app.post('/updateZone', function (req, res) {
+    if(!req.body.id || !req.body.name) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.updateZone(req.body.id, req.body.name).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
+app.post('/addZone', function (req, res) {
+    if(!req.body.name) {
+        respuesta = {
+            error: true,
+            code: 4000,
+            message: 'Datos incompletos'
+        };
+        res.send(respuesta);
+    } else{
+        lm.addZone(req.body.name).then(data => {
+            respuesta.code = data.code;
+            respuesta.data = data.data;
+            respuesta.message = data.message;
+            res.send(respuesta);
+        }).catch(err => {
+            errorResponse.message = err.message;
+            res.send(errorResponse);
+        });
+    }
+});
+
 
 http.createServer(app).listen(ports.host, () => {
     console.log('Server started at http://localhost:' + ports.host);

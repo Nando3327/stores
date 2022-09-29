@@ -625,4 +625,37 @@ module.exports = {
         });
     },
 
+    updateZone: function (id, name) {
+        return new Promise((resolve, reject) => {
+            const query = 'UPDATE Stores.zones ' +
+                'SET name = ? ' +
+                'WHERE id = ? ';
+            connection.query(query, [name, id], (err, res) => {
+                if (err) {
+                    console.log(tag, err);
+                    reject('SQL ERROR');
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    },
+
+    addZone: function (name) {
+        return new Promise((resolve, reject) => {
+            const zone = {name: name}
+            connection.query('INSERT Stores.zones ' +
+                ' SET ?', zone,
+                (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+        });
+    },
+
+
 };

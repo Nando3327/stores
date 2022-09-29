@@ -820,4 +820,52 @@ module.exports = {
             return response;
         });
     },
+
+    updateZone: function (id, name) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.updateZone(id, name).then(data => {
+            if(data){
+                response.data.message = 'ZONA ACTUALIZADA';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO ACTUALIZAR LA ZONA';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO ACTUALIZAR LA ZONA';
+            return response;
+        });
+    },
+
+    addZone: function (name) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.addZone(name).then(data => {
+            if(data){
+                response.data.message = 'ZONA CREADA';
+            } else {
+                response.code = 4002;
+                response.data.message = 'NO SE PUDO CREAR LA ZONA';
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO CREAR LA ZONA';
+            return response;
+        });
+    },
 };
