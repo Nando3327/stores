@@ -154,3 +154,5 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         updateZone(id, name)
             id: Zone id
             name: Zone name
+
+        manageOrdersOutOfDate() Update store status based on orders out of date with visible 1
