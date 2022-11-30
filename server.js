@@ -111,7 +111,7 @@ app.post('/saveStore', function (req, res) {
 });
 
 app.post('/getAllStores', function (req, res) {
-    if(!req.body.user){
+    if(!req.body.user || !req.body.zone){
         respuesta = {
             error: true,
             code: 6000,
