@@ -69,9 +69,9 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
         deleteHangerType(id)
            id: Hanger id
 
-        getAllStores (user, zone?)
+        getAllStores (user, zone)
             user: userkey from user table
-            zone: OPTIONAL zone id to search stores
+            zone: zone id to search stores
 
         getStoresByZones (zones)
             zones: ZoneId from store table
