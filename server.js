@@ -119,7 +119,7 @@ app.post('/getAllStores', function (req, res) {
         };
         res.send(respuesta);
     } else {
-        lm.getAllStores(req.body.user).then(data => {
+        lm.getAllStores(req.body.user, req.body.zone).then(data => {
             respuesta.code = data.code;
             respuesta.data = data.data;
             respuesta.message = data.message;

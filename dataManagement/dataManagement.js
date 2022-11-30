@@ -358,8 +358,46 @@ module.exports = {
         });
     },
 
-    getAllStores: function (user) {
-        //TODO ADD USERADMIN BY USERZONE TABLE IN WHERE CLAUSE
+    getAllStores: function (user, zone) {
+        return new Promise((resolve, reject) => {
+            try {
+                let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
+                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
+                    'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
+                    'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
+                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
+                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
+                    'FROM Stores.stores s ' +
+                    'INNER JOIN Stores.storehistorical sh on s.Location = sh.LocationId ' +
+                    'INNER JOIN Stores.address a on s.Location = a.LocationId ' +
+                    'INNER JOIN Stores.status st on s.StatusId = st.Id ' +
+                    'INNER JOIN Stores.businesstypes b on s.BusinessTypeId = b.Id ' +
+                    'INNER JOIN Stores.hangertypes h on s.HangerTypeId = h.Id ' +
+                    'INNER JOIN Stores.zones z on s.ZoneId = z.Id ' +
+                    'INNER JOIN Stores.userzones UZ ON z.Id = UZ.Zone ' +
+                    'INNER JOIN Stores.status sth on sth.Id = sh.StatusId ' +
+                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
+                if(!!zone) {
+                    query = query + 'and z.Id = ? ';
+                }
+                query = query + 'ORDER BY sh.Date desc';
+
+                connection.query(query, [user, zone], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
+    getAllStoresByZone: function (user, zone) {
         return new Promise((resolve, reject) => {
             try {
                 const query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
