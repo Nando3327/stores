@@ -2,5 +2,6 @@
   "admin": 1,
   "seller": 2,
   "driver": 3,
-  "autoSell": 4
+  "autoSell": 4,
+  "sudo": 5
 }

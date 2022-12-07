@@ -232,6 +232,7 @@ let getStoresByRol = function (user, roll, allStores) {
     return new Promise((resolve) => {
         switch (roll) {
             case roles.admin:
+            case roles.sudo:
                 allStores.forEach((st) => {
                     st.setCanOpenCard(true);
                 })
