@@ -322,7 +322,7 @@ module.exports = {
     addAddress: function (addressStores) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'INSERT [SCHEMA].address (Categorie, Value, LocationId, Type) VALUES ?'
+                let query = 'INSERT [SCHEMA].storeAddress (Categorie, Value, LocationId, Type) VALUES ?'
                 query = query.replaceAll('[SCHEMA]', schema);
                 connection.query(query, [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
                     if (err) {
@@ -342,7 +342,7 @@ module.exports = {
     deleteAddressByLocationId: function (locationId) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'DELETE FROM [SCHEMA].address WHERE LocationId = ?'
+                let query = 'DELETE FROM [SCHEMA].storeAddress WHERE LocationId = ?'
                 query = query.replaceAll('[SCHEMA]', schema);
                 connection.query(query, [locationId], (err, res) => {
                     if (err) {
@@ -388,7 +388,7 @@ module.exports = {
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
                     'FROM [SCHEMA].stores s ' +
                     'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN [SCHEMA].address a on s.Location = a.LocationId ' +
+                    'INNER JOIN [SCHEMA].storeAddress a on s.Location = a.LocationId ' +
                     'INNER JOIN [SCHEMA].storeStatus st on s.StatusId = st.Id ' +
                     'INNER JOIN [SCHEMA].businesstypes b on s.BusinessTypeId = b.Id ' +
                     'INNER JOIN [SCHEMA].hangertypes h on s.HangerTypeId = h.Id ' +
@@ -428,7 +428,7 @@ module.exports = {
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
                     'FROM Stores.stores s ' +
                     'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN [SCHEMA].address a on s.Location = a.LocationId ' +
+                    'INNER JOIN [SCHEMA].storeAddress a on s.Location = a.LocationId ' +
                     'INNER JOIN [SCHEMA].storeStatus st on s.StatusId = st.Id ' +
                     'INNER JOIN [SCHEMA].businesstypes b on s.BusinessTypeId = b.Id ' +
                     'INNER JOIN [SCHEMA].hangertypes h on s.HangerTypeId = h.Id ' +
