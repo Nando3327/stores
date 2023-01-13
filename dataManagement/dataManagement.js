@@ -11,8 +11,8 @@ connection.connect((err) => {
     console.log('Connected!');
 });
 const tag = 'STORES DM'
-
-const schema = 'deliver'
+const schemaJson = require('../configs/schema.json')
+const schema = schemaJson.schema;
 
 module.exports = {
 
