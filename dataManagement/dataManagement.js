@@ -23,7 +23,7 @@ module.exports = {
                     'FROM [SCHEMA].zones Z ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON Z.Id = UZ.Zone ' +
                     'WHERE UZ.UserKey = ?';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -44,7 +44,7 @@ module.exports = {
             try {
                 let query = 'SELECT Z.Id as id, Z.Name as name ' +
                     'FROM [SCHEMA].zones Z';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -66,7 +66,7 @@ module.exports = {
                 let query = 'SELECT BT.Id as id, BT.Type as value ' +
                     'FROM [SCHEMA].businesstypes BT ' +
                     'WHERE BT.Visible = 1 ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -87,7 +87,7 @@ module.exports = {
             let query = 'UPDATE [SCHEMA].businesstypes ' +
                 'SET Type = ? ' +
                 'WHERE Id = ? ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [type, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -104,7 +104,7 @@ module.exports = {
             let query = 'UPDATE [SCHEMA].businesstypes ' +
                 'SET Visible = ? ' +
                 'WHERE Id = ? ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [status, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -121,7 +121,7 @@ module.exports = {
             const businessType = {Type: type}
             let query = 'INSERT [SCHEMA].businesstypes ' +
                 ' SET ?'
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, businessType,
                 (err, res) => {
                     if (err) {
@@ -140,7 +140,7 @@ module.exports = {
                 let query = 'SELECT HT.Id as id, HT.Type as value ' +
                     'FROM [SCHEMA].hangertypes HT ' +
                     'WHERE HT.Visible = 1 ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -161,7 +161,7 @@ module.exports = {
             let query = 'UPDATE [SCHEMA].hangertypes ' +
                 'SET Type = ? ' +
                 'WHERE Id = ? ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [type, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -178,7 +178,7 @@ module.exports = {
             let query = 'UPDATE [SCHEMA].hangertypes ' +
                 'SET Visible = ? ' +
                 'WHERE Id = ? ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [status, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -195,7 +195,7 @@ module.exports = {
             const businessType = {Type: type}
             let query = 'INSERT [SCHEMA].hangertypes ' +
                 ' SET ?'
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, businessType,
                 (err, res) => {
                     if (err) {
@@ -213,7 +213,7 @@ module.exports = {
             try {
                 let query = 'SELECT S.Id as id, S.Status as value ' +
                     'FROM [SCHEMA].storeStatus S ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -233,7 +233,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'INSERT [SCHEMA].stores SET ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, store, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -257,7 +257,7 @@ module.exports = {
                     Store: storeId
                 }
                 let query = 'INSERT [SCHEMA].userstore SET ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, store, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -281,7 +281,7 @@ module.exports = {
                     'ZoneId = ?, Description = ?, Image = ?, ' +
                     'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ?, StatusId = ? ' +
                     'WHERE Location = ?';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [store.Lat, store.Lon, store.Name,
                     store.ZoneId, store.Description, store.Image,
                     store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.StatusId, store.Location], (err, res) => {
@@ -303,7 +303,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'INSERT [SCHEMA].storehistorical SET ?';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, storeHistorical, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -323,7 +323,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'INSERT [SCHEMA].storeAddress (Categorie, Value, LocationId, Type) VALUES ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -343,7 +343,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'DELETE FROM [SCHEMA].storeAddress WHERE LocationId = ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [locationId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -365,7 +365,7 @@ module.exports = {
                 'FROM [SCHEMA].authorizers au ' +
                 'INNER JOIN [SCHEMA].methods mt ON au.source = mt.source ' +
                 'WHERE mt.methodName = ? and au.source = ?; ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [method, source], (err, rows) => {
                 if (err) {
                     console.log(tag, err);
@@ -396,7 +396,7 @@ module.exports = {
                     'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
                     'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 if(!!zone) {
                     query = query + 'and z.Id = ? ';
                 }
@@ -437,7 +437,7 @@ module.exports = {
                     'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
                     'ORDER BY sh.Date desc';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -459,7 +459,7 @@ module.exports = {
                 let query = 'SELECT s.Location as location, s.Name as name ' +
                     'FROM [SCHEMA].stores s ' +
                     'WHERE s.ZoneId in (?) ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zones], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -479,7 +479,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'UPDATE [SCHEMA].stores SET StatusId = ? WHERE Location = ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [statusId, locationId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -512,7 +512,7 @@ module.exports = {
                     'INNER JOIN [SCHEMA].stores S ON O.store = S.Location ' +
                     'WHERE O.visible = 1 AND O.deliver_date < ? ' +
                     'GROUP BY S.Location ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [date], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -534,7 +534,7 @@ module.exports = {
                 let query = 'UPDATE [SCHEMA].stores ' +
                     'SET StatusId = ? ' +
                     'WHERE Location in (?)'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [statusId, locationsId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -557,7 +557,7 @@ module.exports = {
                     's.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc ' +
                     'FROM [SCHEMA].stores s ' +
                     'WHERE s.StatusId = ? ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [statusId], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -579,7 +579,7 @@ module.exports = {
                 let query = 'SELECT S.Store as id ' +
                     'FROM [SCHEMA].userstore S ' +
                     'WHERE S.UserKey = ? ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -601,7 +601,7 @@ module.exports = {
                 let query = 'SELECT U.Roll as roll ' +
                     'FROM [SCHEMA].users U ' +
                     'WHERE U.UserKey = ? ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -624,7 +624,7 @@ module.exports = {
                     'FROM [SCHEMA].userstore US ' +
                     'INNER JOIN [SCHEMA].stores S on US.Store = S.Location ' +
                     'WHERE S.ZoneId = ? and US.UserKey = ?';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zone, user], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -646,7 +646,7 @@ module.exports = {
                 let query = 'SELECT S.Location as location, S.Name as name ' +
                     'FROM [SCHEMA].stores S ' +
                     'WHERE S.ZoneId = ? ';
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zone], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -667,7 +667,7 @@ module.exports = {
             try {
                 let query  = 'INSERT [SCHEMA].userzones (Zone, UserKey) VALUES ?'
                 const values = [userZones]
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, values, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -688,7 +688,7 @@ module.exports = {
             try {
                 let query  = 'INSERT [SCHEMA].userstore (Store, UserKey) VALUES ?'
                 const values = [userZonesStores];
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, values, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -708,7 +708,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'DELETE FROM [SCHEMA].userzones WHERE UserKey = ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -729,7 +729,7 @@ module.exports = {
             try {
                 let query = 'DELETE FROM [SCHEMA].userstore ' +
                     'WHERE UserKey = ? and Store in ?'
-                query = query.replaceAll('[SCHEMA]', schema);
+                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user, [stores]], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -750,7 +750,7 @@ module.exports = {
             let query = 'UPDATE [SCHEMA].zones ' +
                 'SET name = ? ' +
                 'WHERE id = ? ';
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [name, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -767,7 +767,7 @@ module.exports = {
             const zone = {name: name}
             let query = 'INSERT [SCHEMA].zones ' +
                 ' SET ?'
-            query = query.replaceAll('[SCHEMA]', schema);
+            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, zone,
                 (err, res) => {
                     if (err) {
