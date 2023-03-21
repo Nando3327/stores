@@ -39,9 +39,9 @@ let updateStore = function (store) {
     });
 };
 
-let addStoreHistorical = function (storeHistorical) {
+let addStoreHistorical = function (storeHistorical, environment) {
     return new Promise((resolve, reject) => {
-        dm.addStoreHistorical(storeHistorical).then(data => {
+        dm.addStoreHistorical(storeHistorical, environment).then(data => {
             resolve(data);
         }).catch(e => {
             console.log(e);
@@ -50,12 +50,12 @@ let addStoreHistorical = function (storeHistorical) {
     });
 };
 
-let addUserZoneStore = function (stores, user, response) {
+let addUserZoneStore = function (stores, user, response, environment) {
     const userZonesStores = [];
     stores.forEach((storeId) => {
         userZonesStores.push([storeId, user])
     })
-    return dm.addUserZonesStores(userZonesStores).then(data => {
+    return dm.addUserZonesStores(userZonesStores, environment).then(data => {
         if(data){
             response.data.message = 'TIENDAS AGREGADAS POR ZONA ';
         } else {
@@ -141,8 +141,8 @@ let getHistoricalStore = function (locationId, stores) {
     return historical;
 };
 
-let saveHistoricalAddress = function (storeHistorical, addressStores, response, locationId) {
-    return addStoreHistorical(storeHistorical).then(data => {
+let saveHistoricalAddress = function (storeHistorical, addressStores, response, locationId, environment) {
+    return addStoreHistorical(storeHistorical, environment).then(data => {
         if (!data) {
             response.message = 'ERROR AL GUARDAR HISTORICOS';
         }
@@ -167,9 +167,9 @@ let saveHistoricalAddress = function (storeHistorical, addressStores, response, 
     });
 }
 
-let saveStoreUser = function (storeId, userKey) {
+let saveStoreUser = function (storeId, userKey, environment) {
     return new Promise((resolve, reject) => {
-        dm.saveStoreUser(storeId, userKey).then(data => {
+        dm.saveStoreUser(storeId, userKey, environment).then(data => {
             resolve(data);
         }).catch(e => {
             console.log(e);
@@ -178,11 +178,11 @@ let saveStoreUser = function (storeId, userKey) {
     });
 }
 
-let addHistorical = function (response, locationId, statusId, userKey, sellValue, dateToShow) {
+let addHistorical = function (response, locationId, statusId, userKey, sellValue, dateToShow, environment) {
     response.data.message = 'ESTADO ACTUALIZADO';
     const date = getCurrentDateTimeMysql();
     const storeHistorical = new StoreHistoricalModel(locationId, statusId, date, userKey, sellValue, dateToShow, 'ESTATUS ACTUALIZADO');
-    return addStoreHistorical(storeHistorical).then(data => {
+    return addStoreHistorical(storeHistorical, environment).then(data => {
         if(!data) {
             response.code = 6003;
             response.message = 'ERROR AL ACTUALIZAR ESTADO HISTORICO';
@@ -211,9 +211,9 @@ let getUserRol = function (user) {
     });
 }
 
-let getStoresForUser = function (user) {
+let getStoresForUser = function (user, environment) {
     return new Promise((resolve, reject) => {
-        dm.getStoresByUser(user).then(data => {
+        dm.getStoresByUser(user, environment).then(data => {
             const response = [];
             if(data && data.length) {
                 data.forEach((storeId => {
@@ -228,7 +228,7 @@ let getStoresForUser = function (user) {
     });
 }
 
-let getStoresByRol = function (user, roll, allStores) {
+let getStoresByRol = function (user, roll, allStores, environment) {
     return new Promise((resolve) => {
         switch (roll) {
             case roles.admin:
@@ -240,7 +240,7 @@ let getStoresByRol = function (user, roll, allStores) {
                 break;
             case roles.seller:
             case roles.autoSell:
-                return getStoresForUser(user).then((storesUser) => {
+                return getStoresForUser(user, environment).then((storesUser) => {
                     allStores.forEach((st) => {
                         if(storesUser.indexOf(st.location) > -1) {
                             st.setCanOpenCard(true);
@@ -264,8 +264,8 @@ let getStoresByRol = function (user, roll, allStores) {
 
 module.exports = {
 
-    getZones: function (user) {
-        return dm.getZones(user).then(data => {
+    getZones: function (user, environment) {
+        return dm.getZones(user, environment).then(data => {
             const response = {
                 code: 200,
                 message: 'OK',
@@ -348,8 +348,8 @@ module.exports = {
         });
     },
 
-    getAllStores: function (user, zone) {
-        return dm.getAllStores(user, zone).then(stores => {
+    getAllStores: function (user, zone, environment) {
+        return dm.getAllStores(user, zone, environment).then(stores => {
             const response = {
                 code: 200,
                 message: 'OK',
@@ -361,7 +361,7 @@ module.exports = {
                 const allStores =  getStoreData(stores);
                 return getUserRol(user).then((userInfo) => {
                     if(userInfo) {
-                        return getStoresByRol(user, userInfo.roll, allStores).then((stores) => {
+                        return getStoresByRol(user, userInfo.roll, allStores, environment).then((stores) => {
                             response.data.stores = stores;
                             return response;
                         });
@@ -402,7 +402,7 @@ module.exports = {
         });
     },
 
-    saveStore: function (store, mode, address, userKey) {
+    saveStore: function (store, mode, address, userKey, environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -426,7 +426,7 @@ module.exports = {
                     return response;
                 }
                 response.data.message = 'TIENDA ACTUALIZADA';
-                return saveHistoricalAddress(storeHistorical, addressStores, response, store.Location);
+                return saveHistoricalAddress(storeHistorical, addressStores, response, store.Location, environment);
             }).catch(e => {
                 console.log(e);
                 throw e
@@ -444,8 +444,8 @@ module.exports = {
                 addressStores.forEach((add) => {
                     add.setLocationId(data.insertId);
                 });
-                saveStoreUser(data.insertId, userKey).then();
-                return saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId);
+                saveStoreUser(data.insertId, userKey, environment).then();
+                return saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId, environment);
             }).catch(e => {
                 console.log(e);
                 throw e
@@ -453,7 +453,7 @@ module.exports = {
         }
     },
 
-    changeStoreStatus: function (locationId, statusId, userKey, sellValue, dateToShow) {
+    changeStoreStatus: function (locationId, statusId, userKey, sellValue, dateToShow, environment) {
         return dm.changeStoreStatus(locationId, statusId).then(data => {
             const response = {
                 code: 200,
@@ -475,15 +475,15 @@ module.exports = {
                             "action": 'Orden cancelada por no venta'
                         })
                             .then(function (_) {
-                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
+                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow, environment);
                             })
                             .catch(function (_) {
                                 response.message = 'NO SE PUDO ELIMINAR ORDEN ATADA A TIENDA';
-                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
+                                return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow, environment);
                             });
                     })
                 } else {
-                    return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow);
+                    return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow, environment);
                 }
             }else{
                 response.code = 6003;
@@ -496,7 +496,7 @@ module.exports = {
         });
     },
 
-    resetStoresStatus: function (oldStatus, newStatus, userKey, dateToShow, sellValue) {
+    resetStoresStatus: function (oldStatus, newStatus, userKey, dateToShow, sellValue, environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -510,7 +510,7 @@ module.exports = {
                         dm.changeStoreStatus(store.location, newStatus).then(dataStatusChange => {
                             counterStore++
                             if(dataStatusChange) {
-                                addHistorical(response, store.location, newStatus, userKey, sellValue, dateToShow).then();
+                                addHistorical(response, store.location, newStatus, userKey, sellValue, dateToShow, environment).then();
                             }
                             if(counterStore >= data.length){
                                 response.data.message = 'ESTADOS ACTUALIZADOS';
@@ -678,7 +678,7 @@ module.exports = {
         });
     },
 
-    getUserZonesStore: function (user, zone) {
+    getUserZonesStore: function (user, zone, environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -686,7 +686,7 @@ module.exports = {
                 stores: []
             }
         };
-        return dm.getUserZonesStore(user, zone).then(data => {
+        return dm.getUserZonesStore(user, zone, environment).then(data => {
             if(data){
                 response.data.stores = data;
             }
@@ -741,7 +741,7 @@ module.exports = {
         });
     },
 
-    addUserZones: function (zones, user) {
+    addUserZones: function (zones, user, environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -749,13 +749,13 @@ module.exports = {
                 message: 'OK'
             }
         };
-        return dm.deleteUserZones(user).then(() => {
+        return dm.deleteUserZones(user, environment).then(() => {
             const userZones = [];
             zones.forEach((zoneId) => {
                 userZones.push([zoneId, user])
             })
             if(userZones.length) {
-                return dm.addUserZones(userZones).then(data => {
+                return dm.addUserZones(userZones, environment).then(data => {
                     if(data){
                         response.data.message = 'ZONAS AGREGADAS ';
                     } else {
@@ -780,7 +780,7 @@ module.exports = {
         });
     },
 
-    addUserZonesStore: function (zone, user, stores) {
+    addUserZonesStore: function (zone, user, stores, environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -788,15 +788,15 @@ module.exports = {
                 message: 'OK'
             }
         };
-        return dm.getUserZonesStore(user, zone).then((userStoresByZone) => {
+        return dm.getUserZonesStore(user, zone, environment).then((userStoresByZone) => {
             const storesToDelete = [];
             userStoresByZone.forEach((store) => {
                 storesToDelete.push(store.location)
             });
             if(storesToDelete.length) {
-                return dm.deleteUserZonesStore(user, storesToDelete).then(() => {
+                return dm.deleteUserZonesStore(user, storesToDelete, environment).then(() => {
                     if(stores.length) {
-                        return addUserZoneStore(stores, user, response);
+                        return addUserZoneStore(stores, user, response, environment);
                     } else {
                         response.data.message = 'TIENDAS POR ZONA DE USUARIO ELIMINADAS ';
                         return response;
@@ -809,7 +809,7 @@ module.exports = {
                 });
             } else {
                 if(stores.length) {
-                    return addUserZoneStore(stores, user, response);
+                    return addUserZoneStore(stores, user, response, environment);
                 } else {
                     return response;
                 }
@@ -870,7 +870,7 @@ module.exports = {
         });
     },
 
-    manageOrdersOutOfDate: function () {
+    manageOrdersOutOfDate: function (environment) {
         const response = {
             code: 200,
             message: 'OK',
@@ -878,7 +878,7 @@ module.exports = {
                 orders: []
             }
         };
-        return dm.getOrdersOutOfDate().then(data => {
+        return dm.getOrdersOutOfDate(environment).then(data => {
             if(data && data.length){
                 response.data.orders = data;
                 const storesUotOfDate = [];

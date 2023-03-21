@@ -11,16 +11,14 @@ connection.connect((err) => {
     console.log('Connected!');
 });
 const tag = 'STORES DM'
-const schemaJson = require('../configs/schema.json')
-const schema = schemaJson.schema;
 
 module.exports = {
 
-    getZones: function (user) {
+    getZones: function (user, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT Z.Id as id, Z.Name as name, UZ.Id as userZoneId ' +
-                    'FROM [SCHEMA].zones Z ' +
+                    'FROM common.zones Z ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON Z.Id = UZ.Zone ' +
                     'WHERE UZ.UserKey = ?';
                 query = query.replace(/\[SCHEMA\]/g, schema);
@@ -43,8 +41,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT Z.Id as id, Z.Name as name ' +
-                    'FROM [SCHEMA].zones Z';
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                    'FROM common.zones Z';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -64,9 +61,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT BT.Id as id, BT.Type as value ' +
-                    'FROM [SCHEMA].businesstypes BT ' +
+                    'FROM common.businesstypes BT ' +
                     'WHERE BT.Visible = 1 ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -84,10 +80,9 @@ module.exports = {
 
     updateBusinessType: function (id, type) {
         return new Promise((resolve, reject) => {
-            let query = 'UPDATE [SCHEMA].businesstypes ' +
+            let query = 'UPDATE common.businesstypes ' +
                 'SET Type = ? ' +
                 'WHERE Id = ? ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [type, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -101,10 +96,9 @@ module.exports = {
 
     visibleBusinessType: function (id, status) {
         return new Promise((resolve, reject) => {
-            let query = 'UPDATE [SCHEMA].businesstypes ' +
+            let query = 'UPDATE common.businesstypes ' +
                 'SET Visible = ? ' +
                 'WHERE Id = ? ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [status, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -119,9 +113,8 @@ module.exports = {
     addBusinessType: function (type) {
         return new Promise((resolve, reject) => {
             const businessType = {Type: type}
-            let query = 'INSERT [SCHEMA].businesstypes ' +
+            let query = 'INSERT common.businesstypes ' +
                 ' SET ?'
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, businessType,
                 (err, res) => {
                     if (err) {
@@ -138,9 +131,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT HT.Id as id, HT.Type as value ' +
-                    'FROM [SCHEMA].hangertypes HT ' +
+                    'FROM common.hangertypes HT ' +
                     'WHERE HT.Visible = 1 ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -158,10 +150,9 @@ module.exports = {
 
     updateHangerType: function (id, type) {
         return new Promise((resolve, reject) => {
-            let query = 'UPDATE [SCHEMA].hangertypes ' +
+            let query = 'UPDATE common.hangertypes ' +
                 'SET Type = ? ' +
                 'WHERE Id = ? ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [type, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -175,10 +166,9 @@ module.exports = {
 
     visibleHangerType: function (id, status) {
         return new Promise((resolve, reject) => {
-            let query = 'UPDATE [SCHEMA].hangertypes ' +
+            let query = 'UPDATE common.hangertypes ' +
                 'SET Visible = ? ' +
                 'WHERE Id = ? ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [status, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -193,9 +183,8 @@ module.exports = {
     addHangerType: function (type) {
         return new Promise((resolve, reject) => {
             const businessType = {Type: type}
-            let query = 'INSERT [SCHEMA].hangertypes ' +
+            let query = 'INSERT common.hangertypes ' +
                 ' SET ?'
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, businessType,
                 (err, res) => {
                     if (err) {
@@ -212,8 +201,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT S.Id as id, S.Status as value ' +
-                    'FROM [SCHEMA].storeStatus S ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                    'FROM common.storeStatus S ';
                 connection.query(query, [], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -232,8 +220,7 @@ module.exports = {
     saveNewStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'INSERT [SCHEMA].stores SET ?'
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                let query = 'INSERT common.stores SET ?'
                 connection.query(query, store, (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -249,7 +236,7 @@ module.exports = {
         });
     },
 
-    saveStoreUser: function (storeId, userKey) {
+    saveStoreUser: function (storeId, userKey, schema) {
         return new Promise((resolve, reject) => {
             try {
                 const store = {
@@ -276,12 +263,11 @@ module.exports = {
     updateStore: function (store) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'UPDATE [SCHEMA].stores ' +
+                let query = 'UPDATE common.stores ' +
                     'SET Lat = ?, Lon = ?, Name = ?, ' +
                     'ZoneId = ?, Description = ?, Image = ?, ' +
                     'BusinessTypeId = ?, HangerTypeId = ?, Ruc = ?, StatusId = ? ' +
                     'WHERE Location = ?';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [store.Lat, store.Lon, store.Name,
                     store.ZoneId, store.Description, store.Image,
                     store.BusinessTypeId, store.HangerTypeId, store.Ruc, store.StatusId, store.Location], (err, res) => {
@@ -299,7 +285,7 @@ module.exports = {
         });
     },
 
-    addStoreHistorical: function (storeHistorical) {
+    addStoreHistorical: function (storeHistorical, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'INSERT [SCHEMA].storehistorical SET ?';
@@ -322,8 +308,7 @@ module.exports = {
     addAddress: function (addressStores) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'INSERT [SCHEMA].storeAddress (Categorie, Value, LocationId, Type) VALUES ?'
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                let query = 'INSERT common.storeAddress (Categorie, Value, LocationId, Type) VALUES ?'
                 connection.query(query, [addressStores.map(address => [address.Categorie, address.Value, address.LocationId, address.Type])], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -342,8 +327,7 @@ module.exports = {
     deleteAddressByLocationId: function (locationId) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'DELETE FROM [SCHEMA].storeAddress WHERE LocationId = ?'
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                let query = 'DELETE FROM common.storeAddress WHERE LocationId = ?'
                 connection.query(query, [locationId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -362,10 +346,9 @@ module.exports = {
     getAuthorizer: function (source, method) {
         return new Promise((resolve, reject) => {
             let query = 'SELECT mt.value as method, au.value as authorized ' +
-                'FROM [SCHEMA].authorizers au ' +
-                'INNER JOIN [SCHEMA].methods mt ON au.source = mt.source ' +
+                'FROM common.authorizers au ' +
+                'INNER JOIN common.methods mt ON au.source = mt.source ' +
                 'WHERE mt.methodName = ? and au.source = ?; ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [method, source], (err, rows) => {
                 if (err) {
                     console.log(tag, err);
@@ -377,7 +360,7 @@ module.exports = {
         });
     },
 
-    getAllStores: function (user, zone) {
+    getAllStores: function (user, zone, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
@@ -386,13 +369,13 @@ module.exports = {
                     'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
                     'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
-                    'FROM [SCHEMA].stores s ' +
+                    'FROM common.stores s ' +
                     'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN [SCHEMA].storeAddress a on s.Location = a.LocationId ' +
-                    'INNER JOIN [SCHEMA].storeStatus st on s.StatusId = st.Id ' +
-                    'INNER JOIN [SCHEMA].businesstypes b on s.BusinessTypeId = b.Id ' +
-                    'INNER JOIN [SCHEMA].hangertypes h on s.HangerTypeId = h.Id ' +
-                    'INNER JOIN [SCHEMA].zones z on s.ZoneId = z.Id ' +
+                    'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
+                    'INNER JOIN common.storeStatus st on s.StatusId = st.Id ' +
+                    'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
+                    'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
+                    'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
                     'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
@@ -417,7 +400,7 @@ module.exports = {
         });
     },
 
-    getAllStoresByZone: function (user, zone) {
+    getAllStoresByZone: function (user, zone, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
@@ -428,11 +411,11 @@ module.exports = {
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
                     'FROM Stores.stores s ' +
                     'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN [SCHEMA].storeAddress a on s.Location = a.LocationId ' +
-                    'INNER JOIN [SCHEMA].storeStatus st on s.StatusId = st.Id ' +
-                    'INNER JOIN [SCHEMA].businesstypes b on s.BusinessTypeId = b.Id ' +
-                    'INNER JOIN [SCHEMA].hangertypes h on s.HangerTypeId = h.Id ' +
-                    'INNER JOIN [SCHEMA].zones z on s.ZoneId = z.Id ' +
+                    'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
+                    'INNER JOIN common.storeStatus st on s.StatusId = st.Id ' +
+                    'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
+                    'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
+                    'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
                     'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
@@ -457,9 +440,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT s.Location as location, s.Name as name ' +
-                    'FROM [SCHEMA].stores s ' +
+                    'FROM common.stores s ' +
                     'WHERE s.ZoneId in (?) ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zones], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -478,8 +460,7 @@ module.exports = {
     changeStoreStatus: function (locationId, statusId) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'UPDATE [SCHEMA].stores SET StatusId = ? WHERE Location = ?'
-                query = query.replace(/\[SCHEMA\]/g, schema);
+                let query = 'UPDATE common.stores SET StatusId = ? WHERE Location = ?'
                 connection.query(query, [statusId, locationId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -495,7 +476,7 @@ module.exports = {
         });
     },
 
-    getOrdersOutOfDate: function () {
+    getOrdersOutOfDate: function (schema) {
         return new Promise((resolve, reject) => {
             try {
                 let month = new Date().getMonth() + 1;
@@ -509,7 +490,7 @@ module.exports = {
                 const date = new Date().getFullYear() + '-' + month + '-' + day + ' ' + '23:59:59';
                 let query = 'SELECT S.Location as location, S.Name as name, O.user_register as responsable ' +
                     'FROM [SCHEMA].orders O ' +
-                    'INNER JOIN [SCHEMA].stores S ON O.store = S.Location ' +
+                    'INNER JOIN common.stores S ON O.store = S.Location ' +
                     'WHERE O.visible = 1 AND O.deliver_date < ? ' +
                     'GROUP BY S.Location ';
                 query = query.replace(/\[SCHEMA\]/g, schema);
@@ -531,10 +512,9 @@ module.exports = {
     changeStoresStatus: function (locationsId, statusId) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'UPDATE [SCHEMA].stores ' +
+                let query = 'UPDATE common.stores ' +
                     'SET StatusId = ? ' +
                     'WHERE Location in (?)'
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [statusId, locationsId], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -555,9 +535,8 @@ module.exports = {
             try {
                 let query = 'SELECT s.Location as location, s.Lat as lat, s.Lon as lon, ' +
                     's.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc ' +
-                    'FROM [SCHEMA].stores s ' +
+                    'FROM common.stores s ' +
                     'WHERE s.StatusId = ? ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [statusId], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -573,7 +552,7 @@ module.exports = {
         });
     },
 
-    getStoresByUser: function (user) {
+    getStoresByUser: function (user, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT S.Store as id ' +
@@ -599,9 +578,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT U.Roll as roll ' +
-                    'FROM [SCHEMA].users U ' +
+                    'FROM common.users U ' +
                     'WHERE U.UserKey = ? ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [user], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
@@ -617,12 +595,12 @@ module.exports = {
         });
     },
 
-    getUserZonesStore: function (user, zone) {
+    getUserZonesStore: function (user, zone, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT id, S.Location as location, S.Name as name ' +
                     'FROM [SCHEMA].userstore US ' +
-                    'INNER JOIN [SCHEMA].stores S on US.Store = S.Location ' +
+                    'INNER JOIN common.stores S on US.Store = S.Location ' +
                     'WHERE S.ZoneId = ? and US.UserKey = ?';
                 query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zone, user], (err, res) => {
@@ -644,9 +622,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT S.Location as location, S.Name as name ' +
-                    'FROM [SCHEMA].stores S ' +
+                    'FROM common.stores S ' +
                     'WHERE S.ZoneId = ? ';
-                query = query.replace(/\[SCHEMA\]/g, schema);
                 connection.query(query, [zone], (err, res) => {
                     if (err) {
                         console.log(tag, err);
@@ -662,7 +639,7 @@ module.exports = {
         });
     },
 
-    addUserZones: function (userZones) {
+    addUserZones: function (userZones, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query  = 'INSERT [SCHEMA].userzones (Zone, UserKey) VALUES ?'
@@ -683,7 +660,7 @@ module.exports = {
         });
     },
 
-    addUserZonesStores: function (userZonesStores) {
+    addUserZonesStores: function (userZonesStores, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query  = 'INSERT [SCHEMA].userstore (Store, UserKey) VALUES ?'
@@ -704,7 +681,7 @@ module.exports = {
         });
     },
 
-    deleteUserZones: function (user) {
+    deleteUserZones: function (user, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'DELETE FROM [SCHEMA].userzones WHERE UserKey = ?'
@@ -724,7 +701,7 @@ module.exports = {
         });
     },
 
-    deleteUserZonesStore: function (user, stores) {
+    deleteUserZonesStore: function (user, stores, schema) {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'DELETE FROM [SCHEMA].userstore ' +
@@ -747,10 +724,9 @@ module.exports = {
 
     updateZone: function (id, name) {
         return new Promise((resolve, reject) => {
-            let query = 'UPDATE [SCHEMA].zones ' +
+            let query = 'UPDATE common.zones ' +
                 'SET name = ? ' +
                 'WHERE id = ? ';
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, [name, id], (err, res) => {
                 if (err) {
                     console.log(tag, err);
@@ -765,9 +741,8 @@ module.exports = {
     addZone: function (name) {
         return new Promise((resolve, reject) => {
             const zone = {name: name}
-            let query = 'INSERT [SCHEMA].zones ' +
+            let query = 'INSERT common.zones ' +
                 ' SET ?'
-            query = query.replace(/\[SCHEMA\]/g, schema);
             connection.query(query, zone,
                 (err, res) => {
                     if (err) {
