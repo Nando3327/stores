@@ -1,6 +1,5 @@
 const lm = require('./logicManagement/logicManagement');
 const StoreModel = require('./models/store.model');
-const ports = require('./configs/ports.json');
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
