@@ -133,7 +133,7 @@ app.post('/saveStore', function (req, res) {
             if(request.mode === 'edit') {
                 store.setLocation(request.location)
             }
-            lm.saveStore(store, request.mode, request.address, request.user, req.body.environment).then(data => {
+            lm.saveStore(store, request.mode, request.address, request.user, req.body.environment, request.environments).then(data => {
                 respuesta.code = data.code;
                 respuesta.data = data.data;
                 respuesta.message = data.message;

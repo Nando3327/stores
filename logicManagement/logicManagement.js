@@ -402,12 +402,13 @@ module.exports = {
         });
     },
 
-    saveStore: function (store, mode, address, userKey, environment) {
+    saveStore: function (store, mode, address, userKey, environment, environments) {
         const response = {
             code: 200,
             message: 'OK',
             data: {
-                message: ''
+                message: '',
+                environmentsResponse: []
             }
         };
         const date = getCurrentDateTimeMysql();
@@ -445,7 +446,16 @@ module.exports = {
                     add.setLocationId(data.insertId);
                 });
                 saveStoreUser(data.insertId, userKey, environment).then();
-                return saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId, environment);
+                const historicalRequests = []
+                environments.forEach((env) => {
+                    historicalRequests.push(saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId, env));
+                })
+                return Promise.all(historicalRequests).then((values) => {
+                    response.data.environmentsResponse =  values.map((v) => {
+                        return v.data.message
+                    });
+                    return response
+                });
             }).catch(e => {
                 console.log(e);
                 throw e
