@@ -468,11 +468,14 @@ module.exports = {
                             response.message = 'NO EXISTE INFORMACION EN AUTORIZADOR ACTUALIZAR ORDENES';
                         }
                         return axios.post(dataAuthorizer.authorized + dataAuthorizer.method, {
-                            "store": locationId,
-                            "oldOrderStatus": orderStatus.visible,
-                            "newOrderStatus": orderStatus.noSell,
-                            "user": userKey,
-                            "action": 'Orden cancelada por no venta'
+                            data: {
+                                "store": locationId,
+                                "oldOrderStatus": orderStatus.visible,
+                                "newOrderStatus": orderStatus.noSell,
+                                "user": userKey,
+                                "action": 'Orden cancelada por no venta'
+                            },
+                            environment: environment
                         })
                             .then(function (_) {
                                 return addHistorical(response, locationId, statusId, userKey, sellValue, dateToShow, environment);
