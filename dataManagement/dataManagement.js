@@ -377,7 +377,7 @@ module.exports = {
                     'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
-                    'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
+                    'INNER JOIN common.storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
                 query = query.replace(/\[SCHEMA\]/g, schema);
                 if(!!zone) {
@@ -417,7 +417,7 @@ module.exports = {
                     'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
                     'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
-                    'INNER JOIN [SCHEMA].storeStatus sth on sth.Id = sh.StatusId ' +
+                    'INNER JOIN common.storeStatus sth on sth.Id = sh.StatusId ' +
                     'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
                     'ORDER BY sh.Date desc';
                 query = query.replace(/\[SCHEMA\]/g, schema);

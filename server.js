@@ -717,6 +717,6 @@ app.post('/manageOrdersOutOfDate', function (req, res) {
 });
 
 
-http.createServer(app).listen(ports.host, () => {
-    console.log('Server started at http://localhost:' + ports.host);
+http.createServer(app).listen(6002, () => {
+    console.log('Server started at http://localhost:' + 6002);
 });
