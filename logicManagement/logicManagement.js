@@ -17,9 +17,9 @@ let getCurrentDateTimeMysql = function () {
     return currentDate.toISOString().split('T')[0] + ' ' + time;
 }
 
-let saveNewStore = function (store) {
+let saveNewStore = function (store, environment) {
     return new Promise((resolve, reject) => {
-        dm.saveNewStore(store).then(data => {
+        dm.saveNewStore(store, environment).then(data => {
             resolve(data);
         }).catch(e => {
             console.log(e);
@@ -433,7 +433,7 @@ module.exports = {
                 throw e
             });
         } else {
-            return saveNewStore(store).then(data => {
+            return saveNewStore(store, environment).then(data => {
                 if (!data) {
                     response.code = 6001;
                     response.message = 'ERROR AL GUARDAR TIENDA';
@@ -447,14 +447,19 @@ module.exports = {
                 });
                 saveStoreUser(data.insertId, userKey, environment).then();
                 const historicalRequests = []
+                const lastStatusRequests = [];
                 environments.forEach((env) => {
                     historicalRequests.push(saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId, env));
+                    lastStatusRequests.push(dm.addStoreLastStatus(data.insertId, statusConfig.new, env));
                 })
-                return Promise.all(historicalRequests).then((values) => {
-                    response.data.environmentsResponse =  values.map((v) => {
-                        return v.data.message
+
+                return Promise.all(lastStatusRequests).then((values) => {
+                    return Promise.all(historicalRequests).then((values) => {
+                        response.data.environmentsResponse =  values.map((v) => {
+                            return v.data.message
+                        });
+                        return response
                     });
-                    return response
                 });
             }).catch(e => {
                 console.log(e);

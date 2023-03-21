@@ -296,7 +296,22 @@ module.exports = {
                         reject('SQL ERROR');
                         return;
                     }
-                    resolve(res);
+                    const storeData = {
+                        LocationId: storeHistorical.getLocationId(),
+                        StatusId: storeHistorical.getStatusId()
+                    }
+                    let queryLastStatus = 'UPDATE [SCHEMA].storelaststatus ' +
+                        'SET StatusId = ? ' +
+                        'WHERE LocationId = ? '
+                    queryLastStatus = queryLastStatus.replace(/\[SCHEMA\]/g, schema);
+                    connection.query(queryLastStatus, [storeData.StatusId, storeData.LocationId], (err, res) => {
+                        if (err) {
+                            console.log(tag, err);
+                            reject('SQL ERROR');
+                            return;
+                        }
+                        resolve(res);
+                    });
                 });
             } catch (e) {
                 console.log(e);
@@ -364,15 +379,16 @@ module.exports = {
         return new Promise((resolve, reject) => {
             try {
                 let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
-                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
+                    'sls.StatusId as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
                     'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
                     'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
                     'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
                     'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
                     'FROM common.stores s ' +
                     'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
+                    'INNER JOIN [SCHEMA].storelaststatus sls on s.Location = sls.LocationId ' +
                     'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
-                    'INNER JOIN common.storeStatus st on s.StatusId = st.Id ' +
+                    'INNER JOIN common.storeStatus st on sls.StatusId = st.Id ' +
                     'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
                     'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
                     'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
@@ -755,5 +771,24 @@ module.exports = {
         });
     },
 
-
+    addStoreLastStatus: function (store, status, schema) {
+        return new Promise((resolve, reject) => {
+            const lastStatus = {
+                LocationId: store,
+                StatusId: status
+            }
+            let query = 'INSERT [SCHEMA].storelaststatus ' +
+                ' SET ?'
+            query = query.replace(/\[SCHEMA\]/g, schema);
+            connection.query(query, lastStatus,
+                (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+        });
+    },
 };

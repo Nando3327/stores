@@ -13,6 +13,14 @@ module.exports = class StoreHistorical {
         this.LocationId = locationId;
     }
 
+    getLocationId() {
+        return this.LocationId
+    }
+
+    getStatusId() {
+        return this.StatusId
+    }
+
     setDescription(description) {
         this.Description = description;
     }
