@@ -715,6 +715,37 @@ app.post('/manageOrdersOutOfDate', function (req, res) {
     }
 });
 
+app.post('/syncStoresZones', function (req, res) {
+    if(validateCompleteData(req.body)) {
+        const request = req.body.data;
+        if(!request.zoneId || !request.environment || !request.user) {
+            respuesta = {
+                error: true,
+                code: 4000,
+                message: 'Datos incompletos'
+            };
+            res.send(respuesta);
+        } else{
+            lm.syncStoresZones(request.zoneId, request.environment, request.user).then(data => {
+                respuesta.code = data.code;
+                respuesta.data = data.data;
+                respuesta.message = data.message;
+                res.send(respuesta);
+            }).catch(err => {
+                errorResponse.message = err.message;
+                res.send(errorResponse);
+            });
+        }
+    } else {
+        respuesta = {
+            error: true,
+            code: 5000,
+            message: 'Datos Incompletos'
+        };
+        res.send(respuesta);
+    }
+});
+
 
 http.createServer(app).listen(6002, () => {
     console.log('Server started at http://localhost:' + 6002);

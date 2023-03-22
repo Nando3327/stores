@@ -915,4 +915,43 @@ module.exports = {
             return response;
         });
     },
+
+    syncStoresZones: function (zoneId, environment, user) {
+        const response = {
+            code: 200,
+            message: 'OK',
+            data: {
+                message: ''
+            }
+        };
+        return dm.getZonesStore(zoneId).then(data => {
+            if(data && data.length){
+                const storesZone = data.map((dt) => dt.location);
+                return dm.getHistoricalByStores(storesZone, environment).then((storesHistorical) => {
+                    const storesToSync = [];
+                    const lastStatusRequests = [];
+                    const historicalId = storesHistorical.map((sh) => sh.id)
+                    storesZone.forEach((sz) => {
+                        if(historicalId.indexOf(sz) === -1) {
+                            const storeHistorical = new StoreHistoricalModel(sz, statusConfig.new, getCurrentDateTimeMysql(), user, 0, new Date().toISOString().split('T')[0], 'TIENDA CREADA POR SYNCRONIZACION');
+                            storesToSync.push(dm.addStoreHistorical(storeHistorical, environment));
+                            lastStatusRequests.push(dm.addStoreLastStatus(sz, statusConfig.new, environment));
+                        }
+                    });
+                    return Promise.all(lastStatusRequests).then((values) => {
+                        return Promise.all(storesToSync).then(() => {
+                            response.data.message = 'TIENDAS SINCRONIZADAS'
+                            return response
+                        });
+                    });
+                })
+            }
+            return response;
+        }).catch(e => {
+            console.log(e);
+            response.code = 4003;
+            response.data.message = 'NO SE PUDO CREAR LA ZONA';
+            return response;
+        });
+    },
 };

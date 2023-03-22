@@ -791,4 +791,27 @@ module.exports = {
                 });
         });
     },
+
+    getHistoricalByStores: function (storesZone, schema) {
+        return new Promise((resolve, reject) => {
+            try {
+                let query = 'SELECT LocationId id ' +
+                    'FROM [SCHEMA].storehistorical ' +
+                    'WHERE LocationId in (?)' +
+                    'GROUP BY LocationId';
+                query = query.replace(/\[SCHEMA\]/g, schema);
+                connection.query(query, [storesZone], (err, res) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve(res);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
 };
