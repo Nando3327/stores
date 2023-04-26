@@ -248,6 +248,14 @@ let getStoresByRol = function (user, roll, allStores, environment) {
                     })
                     resolve(allStores);
                 })
+            case roles.tenant:
+                return getStoresForUser(user, environment).then((storesUser) => {
+                    allStores = allStores.filter((st) =>{
+                        st.setCanOpenCard(true);
+                        return storesUser.indexOf(st.location) > -1
+                    });
+                    resolve(allStores);
+                })
             case roles.driver:
                 allStores = allStores.filter((st) => {
                     st.setCanOpenCard(true);

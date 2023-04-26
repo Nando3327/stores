@@ -3,5 +3,6 @@
   "seller": 2,
   "driver": 3,
   "autoSell": 4,
-  "sudo": 5
+  "sudo": 5,
+  "tenant": 6
 }
