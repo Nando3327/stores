@@ -16,4 +16,8 @@ module.exports = class Store {
     setLocation(location) {
         this.Location = location;
     }
+
+    setStatusId(statusId) {
+        this.StatusId = statusId;
+    }
 };

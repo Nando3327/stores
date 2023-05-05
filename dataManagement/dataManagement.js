@@ -473,6 +473,27 @@ module.exports = {
         });
     },
 
+    getStoreStatus: function (locationId) {
+        return new Promise((resolve, reject) => {
+            try {
+                let query = 'SELECT StatusId ' +
+                    'FROM common.stores ' +
+                    'WHERE Location = ? ';
+                connection.query(query, [locationId], (err, rows) => {
+                    if (err) {
+                        console.log(tag, err);
+                        reject('SQL ERROR');
+                        return;
+                    }
+                    resolve((rows && rows.length > 0) ? rows[0] : undefined);
+                });
+            } catch (e) {
+                console.log(e);
+                resolve(e);
+            }
+        });
+    },
+
     changeStoreStatus: function (locationId, statusId) {
         return new Promise((resolve, reject) => {
             try {

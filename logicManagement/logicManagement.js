@@ -428,14 +428,34 @@ module.exports = {
             addressStores.push(addressStore);
         });
         if(mode === 'edit') {
-            return updateStore(store).then(data => {
-                if (!data) {
-                    response.code = 6002;
-                    response.message = 'ERROR AL EDITAR TIENDA';
-                    return response;
+            return dm.getStoreStatus(store.Location).then((storeStatus) => {
+                if(storeStatus && storeStatus.StatusId === orderStatus.request) {
+                    store.setStatusId(storeStatus.StatusId);
+                    return updateStore(store).then(data => {
+                        if (!data) {
+                            response.code = 6002;
+                            response.message = 'ERROR AL EDITAR TIENDA';
+                            return response;
+                        }
+                        response.data.message = 'TIENDA ACTUALIZADA';
+                        return response;
+                    }).catch(e => {
+                        console.log(e);
+                        throw e
+                    });
                 }
-                response.data.message = 'TIENDA ACTUALIZADA';
-                return saveHistoricalAddress(storeHistorical, addressStores, response, store.Location, environment);
+                return updateStore(store).then(data => {
+                    if (!data) {
+                        response.code = 6002;
+                        response.message = 'ERROR AL EDITAR TIENDA';
+                        return response;
+                    }
+                    response.data.message = 'TIENDA ACTUALIZADA';
+                    return saveHistoricalAddress(storeHistorical, addressStores, response, store.Location, environment);
+                }).catch(e => {
+                    console.log(e);
+                    throw e
+                });
             }).catch(e => {
                 console.log(e);
                 throw e

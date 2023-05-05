@@ -1,7 +1,9 @@
 {
   "visible": 1,
+  "visit": 2,
   "noSell": 3,
   "return": 5,
   "request": 4,
+  "updated": 10,
   "delayed": 11
 }
