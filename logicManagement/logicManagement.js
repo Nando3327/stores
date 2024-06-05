@@ -228,6 +228,21 @@ let getStoresForUser = function (user, environment) {
     });
 }
 
+let parseResponseStore = function(user, stores, environment, response) {
+    const allStores =  getStoreData(stores);
+    return getUserRol(user).then((userInfo) => {
+        if(userInfo) {
+            return getStoresByRol(user, userInfo.roll, allStores, environment).then((stores) => {
+                response.data.stores = stores;
+                return response;
+            });
+        } else {
+            response.data.stores = allStores;
+            return response;
+        }
+    })
+}
+
 let getStoresByRol = function (user, roll, allStores, environment) {
     return new Promise((resolve) => {
         switch (roll) {
@@ -366,18 +381,7 @@ module.exports = {
                 }
             };
             if(stores) {
-                const allStores =  getStoreData(stores);
-                return getUserRol(user).then((userInfo) => {
-                    if(userInfo) {
-                        return getStoresByRol(user, userInfo.roll, allStores, environment).then((stores) => {
-                            response.data.stores = stores;
-                            return response;
-                        });
-                    } else {
-                        response.data.stores = allStores;
-                        return response;
-                    }
-                })
+                return parseResponseStore(user, stores, environment, response);
             } else{
                 response.message = 'NO EXISTEN TIENDAS REGISTRADAS';
                 return response;
@@ -402,6 +406,27 @@ module.exports = {
                 return response;
             } else{
                 response.message = 'NO EXISTEN TIENDAS REGISTRADAS POR ZONAS';
+                return response;
+            }
+        }).catch(e => {
+            console.log(e);
+            throw e
+        });
+    },
+
+    getStore: function (user, storeId, environment) {
+        return dm.getStore(user, storeId, environment).then(store => {
+            const response = {
+                code: 200,
+                message: 'OK',
+                data: {
+                    stores: []
+                }
+            };
+            if(store) {
+                return parseResponseStore(user, store, environment, response);
+            } else{
+                response.message = 'NO EXISTEN TIENDAS REGISTRADAS';
                 return response;
             }
         }).catch(e => {

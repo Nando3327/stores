@@ -73,6 +73,10 @@ TO USE MYSQL INSTALLER REVIEW LINKER DOC
             user: userkey from user table
             zone: zone id to search stores
 
+        getStore (user, zone)
+            user: userkey from user table
+            storeId: store id to search stores
+
         getStoresByZones (zones)
             zones: ZoneId from store table
 

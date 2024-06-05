@@ -215,6 +215,37 @@ app.post('/getStoresByZones', function (req, res) {
     }
 });
 
+app.post('/getStore', function (req, res) {
+    if(validateCompleteData(req.body)) {
+        const request = req.body.data;
+        if(!request.storeId){
+            respuesta = {
+                error: true,
+                code: 6000,
+                message: 'Datos incompletos'
+            };
+            res.send(respuesta);
+        } else {
+            lm.getStore(request.user, request.storeId, req.body.environment).then(data => {
+                respuesta.code = data.code;
+                respuesta.data = data.data;
+                respuesta.message = data.message;
+                res.send(respuesta);
+            }).catch(err => {
+                errorResponse.message = err.message;
+                res.send(errorResponse);
+            });
+        }
+    } else {
+        respuesta = {
+            error: true,
+            code: 5000,
+            message: 'Datos Incompletos'
+        };
+        res.send(respuesta);
+    }
+});
+
 app.post('/changeStoreStatus', function (req, res) {
     if(validateCompleteData(req.body)) {
         const request = req.body.data;

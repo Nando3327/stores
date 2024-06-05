@@ -12,6 +12,28 @@ connection.connect((err) => {
 });
 const tag = 'STORES DM'
 
+let createCopyString = function(original_string){
+    return (' ' + original_string).slice(1);
+}
+
+const allStoreDataQuery = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
+    'sls.StatusId as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
+    'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
+    'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
+    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
+    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
+    'FROM common.stores s ' +
+    'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
+    'INNER JOIN [SCHEMA].storelaststatus sls on s.Location = sls.LocationId ' +
+    'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
+    'INNER JOIN common.storeStatus st on sls.StatusId = st.Id ' +
+    'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
+    'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
+    'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
+    'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
+    'INNER JOIN common.storeStatus sth on sth.Id = sh.StatusId ' +
+    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
+
 module.exports = {
 
     getZones: function (user, schema) {
@@ -378,23 +400,7 @@ module.exports = {
     getAllStores: function (user, zone, schema) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
-                    'sls.StatusId as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
-                    'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
-                    'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
-                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
-                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
-                    'FROM common.stores s ' +
-                    'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN [SCHEMA].storelaststatus sls on s.Location = sls.LocationId ' +
-                    'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
-                    'INNER JOIN common.storeStatus st on sls.StatusId = st.Id ' +
-                    'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
-                    'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
-                    'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
-                    'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
-                    'INNER JOIN common.storeStatus sth on sth.Id = sh.StatusId ' +
-                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ';
+                let query = createCopyString(allStoreDataQuery);
                 query = query.replace(/\[SCHEMA\]/g, schema);
                 if(!!zone) {
                     query = query + 'and z.Id = ? ';
@@ -416,28 +422,13 @@ module.exports = {
         });
     },
 
-    getAllStoresByZone: function (user, zone, schema) {
+    getStoresByZones: function (zones) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'SELECT sh.Date, s.Location as location, s.Lat as lat, s.Lon as lon, s.Name as name, s.Description as description, s.Image as image, s.Ruc as ruc, ' +
-                    'st.Id as statusId, st.Status as status, st.Marker as marker, st.ClassStyle as classStyle, st.ShowDateField as showDate, sh.DateToShow as historicalDate, ' +
-                    'z.Id as zoneId, b.Id as businessTypeId, b.Type as businessType, h.Id as hangerTypeId, h.Type as hangerType, ' +
-                    'a.Type as addressType, a.Value as address, a.Id as addressId, a.Categorie as addressCategorie, ' +
-                    'sh.LocationId as locationMarker, sh.StatusId as statusHistorical, sh.DateToShow as date, sh.LocationId as locationMarker, ' +
-                    'sh.Id as historicalId, sh.SellValue as sellValue, sth.ClassStyle as historicalClassStyle, sth.ShowHistorical as showHistorical, sth.ShowDateField as showDateField ' +
-                    'FROM Stores.stores s ' +
-                    'INNER JOIN [SCHEMA].storehistorical sh on s.Location = sh.LocationId ' +
-                    'INNER JOIN common.storeAddress a on s.Location = a.LocationId ' +
-                    'INNER JOIN common.storeStatus st on s.StatusId = st.Id ' +
-                    'INNER JOIN common.businesstypes b on s.BusinessTypeId = b.Id ' +
-                    'INNER JOIN common.hangertypes h on s.HangerTypeId = h.Id ' +
-                    'INNER JOIN common.zones z on s.ZoneId = z.Id ' +
-                    'INNER JOIN [SCHEMA].userzones UZ ON z.Id = UZ.Zone ' +
-                    'INNER JOIN common.storeStatus sth on sth.Id = sh.StatusId ' +
-                    'WHERE a.Categorie = "PR" and UZ.UserKey = ? ' +
-                    'ORDER BY sh.Date desc';
-                query = query.replace(/\[SCHEMA\]/g, schema);
-                connection.query(query, [user], (err, rows) => {
+                let query = 'SELECT s.Location as location, s.Name as name ' +
+                    'FROM common.stores s ' +
+                    'WHERE s.ZoneId in (?) ';
+                connection.query(query, [zones], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
                         reject('SQL ERROR');
@@ -452,13 +443,15 @@ module.exports = {
         });
     },
 
-    getStoresByZones: function (zones) {
+    getStore: function (user, storeId, schema) {
         return new Promise((resolve, reject) => {
             try {
-                let query = 'SELECT s.Location as location, s.Name as name ' +
-                    'FROM common.stores s ' +
-                    'WHERE s.ZoneId in (?) ';
-                connection.query(query, [zones], (err, rows) => {
+                let query = createCopyString(allStoreDataQuery);
+                query = query.replace(/\[SCHEMA\]/g, schema);
+                query = query + 'and s.Location = ? ';
+                query = query + 'ORDER BY sh.Date desc';
+
+                connection.query(query, [user, storeId], (err, rows) => {
                     if (err) {
                         console.log(tag, err);
                         reject('SQL ERROR');
