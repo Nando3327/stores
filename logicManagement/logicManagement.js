@@ -502,7 +502,7 @@ module.exports = {
                 const historicalRequests = []
                 const lastStatusRequests = [];
                 environments.forEach((env) => {
-                    historicalRequests.push(saveHistoricalAddress(storeHistorical, addressStores, response, data.insertId, env));
+                    historicalRequests.push(saveHistoricalAddress(storeHistorical, [], response, data.insertId, env));
                     lastStatusRequests.push(dm.addStoreLastStatus(data.insertId, statusConfig.new, env));
                 })
 
@@ -511,7 +511,9 @@ module.exports = {
                         response.data.environmentsResponse =  values.map((v) => {
                             return v.data.message
                         });
-                        return response
+                        return saveHistoricalAddress(storeHistorical, addressStores, response, store.Location, environment).then(() => {
+                            return response
+                        })
                     });
                 });
             }).catch(e => {
