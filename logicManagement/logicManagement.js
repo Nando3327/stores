@@ -10,6 +10,7 @@ const historicalConfig = require('../configs/historical.json');
 const orderStatus = require('../configs/orderStatus.json');
 const images = require('../configs/images.json');
 const roles = require('../configs/rol.json');
+const imageEnv = require('../configs/imageEnv.json');
 
 let getCurrentDateTimeMysql = function () {
     const currentDate = new Date();
@@ -95,7 +96,12 @@ let getStoreData = function (stores) {
     const storesAdded = [];
     stores.forEach((store) => {
         if(storesAdded.indexOf(store.location) === -1) {
-            const image = (images.returnImages) ? store.image: '';
+            const imgStored = store.image?.split('images/');
+            let img = '';
+            if(imgStored && imgStored.length > 1) {
+                img = imageEnv.host + 'images/' + imgStored[1];
+            }
+            const image = (images.returnImages) ? img: '';
             const responseObject = new StoreResponseModel(store.location, store.zoneId, store.statusId, store.name, store.lat, store.lon, store.description, image, store.businessTypeId, store.hangerTypeId, store.ruc, store.status, store.businessType, store.hangerType, store.marker, store.classStyle, store.showDate, store.historicalDate)
             responseObject.setAddresses(getAddressesStore(store.location, stores));
             responseObject.setHistorical(getHistoricalStore(store.location, stores).splice(0, historicalConfig.historicalSizeData));
